@@ -6,7 +6,7 @@ const express = require('express')
 const fetch = require('node-fetch')
 const app = express()
 
-app.use(express.static('static'))
+app.use(express.static(__dirname + '/static'))
 
 app.get('/api/posts', (req, res) => {
   dao.findAll().then(docs => {
@@ -15,7 +15,6 @@ app.get('/api/posts', (req, res) => {
 })
 
 app.get('/api/post/:id',  (req, res) => {
-  console.log('got me!!');
   // search post with id in mongodb
   dao.findOne({name: req.params.id + '.org'})
     .then(post => {

@@ -2,8 +2,10 @@ const MongoClient = require('mongodb').MongoClient
 const assert = require('assert');
 const fetch = require('node-fetch')
 
+const url = `mongodb://${process.env.MONGODOMAIN || 'mongodb'}:27017`
+
 function getCollection() {
-  return new MongoClient("mongodb://localhost:28001", { useNewUrlParser: true })
+  return new MongoClient(url, { useNewUrlParser: true })
     .connect().then(cli => [cli, cli.db('blog').collection('posts')]);
 }
 

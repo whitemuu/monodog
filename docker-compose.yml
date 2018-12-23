@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  mongodb:
+    image: mongo:3.4-jessie
+    ports:
+      - 5002:27017
+    volumes:
+      - ./data:/data/db
+
+  blog:
+    build: ./blog
+    ports:
+      - 5001:5000
+    volumes:
+      - ./blog:/home/node/app
+    depends_on:
+      - mongodb

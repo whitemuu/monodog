@@ -1,2 +1,4 @@
-/node_modules/
-/package-lock.json
+/blog/node_modules/
+/blog/package-lock.json
+/data/
+*.gz
