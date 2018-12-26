@@ -2,40 +2,35 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nichijou</title>
     <style>
      body {
        margin: 0;
        /* background: #f2f2f2; */
        /* background: #ECCB6B; */
-       background: #34495e;
+       /* background: #34495e; */
        /* background: #fefefe; */
        /* background: #143ACF; */
        /* background: #CBCED5; */
-       /* background: #EAC4BF; */
+       background: #EAC4BF;
        font-family: 'PingFang SC', 'Source Sans Pro',sans-serif;
      }
-     aside {
-       position: fixed;
-       top: 0;
-       bottom: 0;
-       width: 250px;
+     /* header nav footer */
+     header {
+       display: none;
      }
-     aside > header {
-       height: 250px;
+     nav > ul {
+       margin: 5px;
+       padding: 0;
        display: flex;
-       align-items: center;
-       justify-content: center;
-     }
-     aside > nav {
-       /* height: 70vh; */
-       /* background: #ccc; */
+       justify-content: space-around;
      }
      nav > ul > li {
-       font-size: 2em;
+       display: inline-block;
+       font-size: 1.2em;
        list-style: none;
        font-weight: bold;
-       /* font-weight: lighter; */
        color: #fff;
      }
      nav > ul > li > a{
@@ -52,33 +47,25 @@
        color: unset;
        text-decoration: none;
      }
-     aside > footer {
-       position: fixed;
+     footer {
        /* padding-left: 2em; */
        bottom: 0;
        height: 20px;
-       width: 250px;
        color: #fff;
-       /* font-weight: bold; */
        font-size: 0.8em;
        text-align: center;
      }
+     /* content */
      main {
        overflow:auto;
        /*color: #34495e;*/
-      color: rgba(0,0,0,.84);
-       margin:15px 15px 0 250px;
-       padding: 0;
+       color: rgba(0,0,0,.84);
        background: #fff;
-       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
        /* min-height: calc(100vh - 30px); */
      }
      main > * {
-       /* font-family: 'Source Sans Pro'; */
+       margin: 10px;
        line-height: 2;
-       max-width: 648px;
-       margin-left: 80px;
-       /* text-align: justify; */
      }
      p {
        font-size: 1.1em;
@@ -90,8 +77,8 @@
      .section-number {
        box-sizing: border-box;
        /* only box have size */
+       /* background: #ccc; */
        display: inline-block;
-       width: 80px;
        text-align: right;
        color: #a4b9ce;
        padding-right: 0.5em;
@@ -101,13 +88,10 @@
        /* margin-left: 40px; */
      }
      main > pre {
+       margin: unset;
        line-height: unset;
-       width: fit-content;
-       max-width: unset;
-       min-width: 648px;
-       margin-left: unset;
-       padding-left: 80px;
        background: #f5f5f5;
+       overflow: auto;
        /* display: inline-block; */
      }
      /* main > pre > code.language-unknown { */
@@ -116,7 +100,6 @@
      }
      table {
        text-align: left;
-       min-width: 648px;
      }
      tr:nth-child(2n+1) {
        background: #eee;
@@ -158,30 +141,81 @@
        display: block;
        color: #a4b9ce;
      }
+     @media only screen and (min-width: 1000px) {
+       main {
+         margin:15px 15px 0 250px;
+         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
+       }
+       main > * {
+         max-width: 648px;
+         margin-left: 80px;
+         /* padding: 0; */
+       }
+       .section-number {
+         width: 80px;
+       }
+       main > pre {
+         max-width: unset;
+         min-width: 648px;
+         margin-left: unset;
+         width: fit-content;
+         padding-left: 80px;
+       }
+       table {
+         min-width: 648px;
+       }
+       /* head nav footer */
+       nav, header, footer {
+         position: fixed;
+         /* bottom: 0; */
+         width: 250px;
+       }
+       header {
+         top: 0;
+         height: 250px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+       }
+       nav {
+         top: 250px;
+       }
+       nav > ul {
+         display: unset;
+       }
+       nav > ul > li {
+         margin-left: 50px;
+         display: block;
+         font-size: 2em;
+       }
+       footer {
+         position: fixed;
+         width: 250px;
+         bottom: 0;
+       }
+     }
     </style>
   </head>
   <body>
-    <aside>
+    <nav>
+      <ul>
+        <li><a href="/posts" onclick="route('/posts'); return false">POSTS</a></li>
+        <li><a href="/tags" onclick="route('/tags'); return false">TAGS</a></li>
+        <li><a href="/tutor" onclick="route('/tutor'); return false">TUTOR</a></li>
+        <!-- <li><a href="#">BLOGROLL</a></li> -->
+        <li><a href="/about" onclick="route('/about'); return false">ABOUT</a></li>
+      </ul>
+      </nav>
+      <main>
+      </main>
       <header>
         <a href="/">
           <img src="/img/nano.jpg" alt="" height="150px"/>
         </a>
       </header>
-      <nav>
-        <ul>
-          <li><a href="/posts" onclick="route('/posts'); return false">POSTS</a></li>
-          <li><a href="/tags" onclick="route('/tags'); return false">TAGS</a></li>
-          <li><a href="/tutor" onclick="route('/tutor'); return false">TUTORS</a></li>
-          <!-- <li><a href="#">BLOGROLL</a></li> -->
-          <li><a href="/about" onclick="route('/about'); return false">ABOUT</a></li>
-        </ul>
-      </nav>
       <footer>
         ©2018 by nichijou
       </footer>
-    </aside>
-    <main>
-    </main>
   </body>
   <script src="/index.js"></script>
 </html>
