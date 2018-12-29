@@ -3,9 +3,22 @@ const main = document.getElementsByTagName('main')[0];
 const cache = {
   '/api/tags': ['<p>工事中</p>', 'Tags | nichijou'],
   '/api/tutor': ['<p>工事中</p>', 'Tutors | nichijou'],
-  '/api/about': ['<p>28</p>', 'About | nichijou']
-  // '/api/posts': [null, 'Posts | nichijou']
+  '/api/about': [`<h2 style="font-size:50px;color:#eee">ABOUT</h2><pre><code class='language-perl'>
+  my %info = qw{
+                   name angus_zhang
+                twitter twitter.com/nichijou_lab
+                  email angusbike@gmail.com
+               };
+
+  my %site_info = (
+                   front_end => [qw/HTML CSS Javascript/],
+                   back_end  => [qw/Nodejs Express Org-js MongoDB/],
+                   repository => 'https://github.com/whitemuu/nodeblog'
+                  );
+</code></pre><div></div>`, 'About | nichijou']
 }
+// age ${new Date().getFullYear() - 1991}
+
 
 function fetchAndSetMain(url, manipulate) {
   // console.log(url);
@@ -17,7 +30,7 @@ function fetchAndSetMain(url, manipulate) {
 }
 
 function genTagsHtml(tags){
-  return '<div id="tags">' + tags.split(' ').reduce((sum, tag) => `${sum}<span id='${tag}'>${tag}</span>`,'') + '</div>'
+  return '<div class="tags">' + tags.split(' ').reduce((sum, tag) => `${sum}<span id='${tag}'>${tag}</span>`,'') + '</div>'
 }
 
 function route(path) {
@@ -29,7 +42,7 @@ function route(path) {
   path = path.replace(/(\w{6,7})/, (match, p1) => parseInt(p1, 36).toString())
 
   let hit = cache['/api' + path];
-  console.log(hit);
+  // console.log(hit);
   if (hit) {
     main.innerHTML = hit[0];
     document.title = hit[1];
@@ -41,8 +54,8 @@ function route(path) {
       cache['/api/posts'][1] = 'Posts | nichijou'
       return posts.reduce((sum, post) => {
         post.name = parseInt(post.name.substr(0, 10)).toString(36).toUpperCase()
-        return `${sum}<h1><a href="/post/${post.name}" onclick="route('/post/${post.name}'); return false">${post.title}</a></h1>
-<p>${genTagsHtml(post.tags)}</p>`},'')
+        return `${sum}<h1 style="font:lighter 1.5em sans-serif;margin-top:2em;"><a href="/post/${post.name}" onclick="route('/post/${post.name}'); return false">${post.title}</a></h1>
+${genTagsHtml(post.tags)}`},'')
     })
 
   } else if(/^\/post\/\d{10}$/.test(path)) {

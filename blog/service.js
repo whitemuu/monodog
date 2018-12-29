@@ -37,6 +37,9 @@ function genNew(post) {
       post.tags = orgDocument.directiveValues['tags:']
       post.title = orgDocument.title
       post.content = orgHTMLDocument.contentHTML
+      post.content = post.content.replace(/<table>/g, '<div class="table-container"><table>').replace(/<\/table>/g, '<\/table><\/div>')
+        .replace(/<p><img/g, '<p class="img-container"><img')
+        .replace(/<img src="\.\./g, '<img src="https://raw.githubusercontent.com/whitemuu/blog/master')
       post.toc = orgHTMLDocument.tocHTML
       return post
     })

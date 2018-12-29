@@ -8,13 +8,16 @@
      body {
        margin: 0;
        /* background: #f2f2f2; */
-       /* background: #ECCB6B; */
+       background: #ECCB6B;
        /* background: #34495e; */
        /* background: #fefefe; */
        /* background: #143ACF; */
        /* background: #CBCED5; */
-       background: #EAC4BF;
+       /* background: #EAC4BF; */
        font-family: 'PingFang SC', 'Source Sans Pro',sans-serif;
+     }
+     h1, h2 {
+       font-weight: normal;
      }
      /* header nav footer */
      header {
@@ -70,36 +73,68 @@
      p {
        font-size: 1.1em;
      }
-     main > h2, h3, h4 {
-       /* display: flex; */
+     main > h2, main > h3, main > h4 {
        margin-left: unset;
      }
      .section-number {
        box-sizing: border-box;
-       /* only box have size */
-       /* background: #ccc; */
        display: inline-block;
        text-align: right;
        color: #a4b9ce;
        padding-right: 0.5em;
      }
+     a {
+       color: #0069d6;
+       text-decoration: none;
+       /* line-height: inherit; */
+       /* font-weight: inherit; */
+     }
      ol, ul {
        box-sizing: border-box;
        /* margin-left: 40px; */
+     }
+     li {
+       /* line-height: 0.95em; */
+       color: #888;
+     }
+     .table-container {
+       margin: unset;
+       overflow-x: auto;
      }
      main > pre {
        margin: unset;
        line-height: unset;
        background: #f5f5f5;
        overflow: auto;
+       padding: 10px 0;
        /* display: inline-block; */
      }
      /* main > pre > code.language-unknown { */
-     main > pre > code {
+     code {
        font-family: 'menlo', monospace;
+     }
+     main > pre > code {
+       /* background-color: unset; */
+     }
+     :not(pre) > code {
+       background-color: #fee9cc;
+       border-radius: 3px;
+       font-size: 85%;
+       margin: 0;
+       padding: .2em .4em;
+     }
+     span.task-status {
+       padding: 0 0.2em;
+       margin-right: 10px;
+       color: white;
+     }
+     span.task-status.todo {
+       background-color: rgb(39, 149, 182);
      }
      table {
        text-align: left;
+       border-collapse: collapse;
+       margin: auto;
      }
      tr:nth-child(2n+1) {
        background: #eee;
@@ -107,10 +142,15 @@
      th, td {
        min-width: 50px;
        padding: 2px 10px;
+       border: 1px solid #ddd;
      }
-     #tags > span {
+     main > .tags {
+       /* margin-top: 0; */
+       margin-bottom: 2em;
+     }
+     .tags > span {
        /* background:#ECCB6B; */
-       background: red;
+       background: #eccb6b;
        color:#fff;
        padding: 0px 5px 2px;
        margin: 2px;
@@ -141,6 +181,18 @@
        display: block;
        color: #a4b9ce;
      }
+     @media only screen and (max-width: 999px) {
+       .img-container {
+         margin: 0;
+         /* display: flex; */
+         /* flex will stretch img */
+       }
+       img {
+         max-width: 100%;
+         margin: auto;
+         display: block;
+       }
+     }
      @media only screen and (min-width: 1000px) {
        main {
          margin:15px 15px 0 250px;
@@ -151,8 +203,15 @@
          margin-left: 80px;
          /* padding: 0; */
        }
+       img {
+         max-width: 1000px;
+       }
        .section-number {
          width: 80px;
+       }
+       .table-container {
+         margin-left: 80px;
+         overflow-x: visible;
        }
        main > pre {
          max-width: unset;
@@ -192,6 +251,22 @@
          position: fixed;
          width: 250px;
          bottom: 0;
+       }
+     }
+     /* order matters */
+     @media only screen and (min-width: 1600px) {
+       main {
+         margin:15px 15px 0 25vw;
+       }
+       nav, header, footer {
+         /* bottom: 0; */
+         width: 25vw;
+         box-sizing: border-box;
+         padding-right: 50px;
+         text-align: right;
+       }
+       header{
+         justify-content: flex-end;
        }
      }
     </style>
