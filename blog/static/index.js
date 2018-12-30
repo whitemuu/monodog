@@ -3,19 +3,18 @@ const main = document.getElementsByTagName('main')[0];
 const cache = {
   '/api/tags': ['<p>工事中</p>', 'Tags | nichijou'],
   '/api/tutor': ['<p>工事中</p>', 'Tutors | nichijou'],
-  '/api/about': [`<h2 style="font-size:50px;color:#eee">ABOUT</h2><pre><code class='language-perl'>
-  my %info = qw{
-                   name angus_zhang
-                twitter twitter.com/nichijou_lab
-                  email angusbike@gmail.com
-               };
+  '/api/about': [`<h2 style="font-size:50px;color:#eee">ABOUT</h2><pre><code class='language-perl'>my %info = qw{
+                 name angus_zhang
+              twitter <a href="https://twitter.com/nichijou_lab" target="_blank">nichijou_lab</a>
+                email angusbike@gmail.com
+             };
 
-  my %site_info = (
-                   front_end => [qw/HTML CSS Javascript/],
-                   back_end  => [qw/Nodejs Express Org-js MongoDB/],
-                   repository => 'https://github.com/whitemuu/nodeblog'
-                  );
-</code></pre><div></div>`, 'About | nichijou']
+my %site_info = (
+                 front_end => [qw/HTML CSS Javascript/],
+                  back_end => [qw/Nodejs Express Org-js MongoDB/],
+                      desc => <a href='/post/TYZOX7'>link</a>
+                repository => <a href='https://github.com/whitemuu/nodeblog' target='_blank'>'whitemuu/nodeblog'</a>
+                );</code></pre><div></div>`, 'About | nichijou']
 }
 // age ${new Date().getFullYear() - 1991}
 
@@ -23,7 +22,12 @@ const cache = {
 function fetchAndSetMain(url, manipulate) {
   // console.log(url);
   fetch(url)
-    .then(res => res.json())
+    .then(res => {
+      if (res.status !== 200) {
+        return Promise.reject('not found')
+      }
+      return res.json()
+    })
     .then(json => manipulate(json))
     .then(content => {main.innerHTML = content; cache[url][0] = content})
     .catch(err => console.log(err))
@@ -70,7 +74,7 @@ ${post.content}<div id='eof'>✣</div>`})
 
   } else {
 
-    main.innerHTML = 'no such path'
+    main.innerHTML = "<div style='color:rgb(50, 50, 50, 20%);font:italic 5em sans-serif;'>404</div><p>Your link is invalid or I've deleted the resource. Sorry for either case.</p>"
 
   }
 }

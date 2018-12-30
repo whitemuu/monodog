@@ -1,4 +1,5 @@
-FROM node:8-alpine
+# FROM node:8-alpine
+FROM node:11.6-alpine
 COPY . /home/node/app
 WORKDIR /home/node/app
 RUN npm install -g nodemon

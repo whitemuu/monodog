@@ -1,6 +1,9 @@
 const dao = require("./dao.js")
 const org = require("org")
 const fetch = require('node-fetch')
+const Prism = require('prismjs')
+var loadLanguages = require('prismjs/components/');
+loadLanguages(['lisp', 'haskell', 'java', 'lua']);
 
 const parser = new org.Parser();
 
@@ -30,7 +33,7 @@ function genNew(post) {
         headerOffset: 1,
         exportFromLineNumber: false,
         suppressSubScriptHandling: false,
-        suppressAutoLink: false
+        suppressAutoLink: true
       })
 
       post = (({name, sha, html_url}) => ({name, sha, html_url}))(post)
@@ -40,6 +43,16 @@ function genNew(post) {
       post.content = post.content.replace(/<table>/g, '<div class="table-container"><table>').replace(/<\/table>/g, '<\/table><\/div>')
         .replace(/<p><img/g, '<p class="img-container"><img')
         .replace(/<img src="\.\./g, '<img src="https://raw.githubusercontent.com/whitemuu/blog/master')
+        .replace(/&#39;/g, "'") // org-js's odd behavior, I've to replace 'em
+        .replace(/&#34;/g, '"')
+        .replace(/<code class="language-(.+)">([\s\S]*?)<\/code>/g, (match, p1, p2) => {
+          try {
+            return `<code class="language-${p1}">${Prism.highlight(p2, Prism.languages[p1], p1)}<\/code>`
+          } catch(e) {
+            console.log('未添加对 ' + p1 + " 支持")
+          }
+          return match
+        })
       post.toc = orgHTMLDocument.tocHTML
       return post
     })
