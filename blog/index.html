@@ -5,8 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nichijou</title>
     <link href="/prism.css" rel="stylesheet" />
+    <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,600,700" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,600" rel="stylesheet">
+    <!-- <link href="/googlefonts.css" rel="stylesheet"> -->
     <!-- <script src="/prism.js"></script> -->
     <style>
+     :root {
+       /* --main-margin-small: 15px; */
+       --main-margin-medium: 40px;
+       --main-margin-normal: 80px;
+     }
+
      body {
        margin: 0;
        /* background: #f2f2f2; */
@@ -16,9 +25,9 @@
        /* background: #143ACF; */
        /* background: #CBCED5; */
        /* background: #EAC4BF; */
-       font-family: 'PingFang SC', 'Source Sans Pro',sans-serif;
+       font-family: 'Open Sans', 'PingFang SC', sans-serif;
      }
-     h1, h2 {
+     h1 {
        font-weight: normal;
      }
      /* header nav footer */
@@ -69,14 +78,13 @@
        min-height: calc(100vh - 15px);
      }
      main > * {
-       margin: 10px;
-       line-height: 2;
+       margin-left: 15px;
+       margin-right: 15px;
      }
      p {
        font-size: 1.1em;
-     }
-     main > h2, main > h3, main > h4 {
-       margin-left: unset;
+       line-height: 2;
+       margin-top: 1em;
      }
      .section-number {
        box-sizing: border-box;
@@ -88,16 +96,15 @@
      a {
        color: #0069d6;
        text-decoration: none;
-       /* line-height: inherit; */
-       /* font-weight: inherit; */
      }
      ol, ul {
        box-sizing: border-box;
        /* margin-left: 40px; */
      }
-     li {
+     li, th, td {
        /* line-height: 0.95em; */
-       color: #888;
+       color: #555;
+       line-height: 1.8;
      }
      .table-container {
        margin: unset;
@@ -106,18 +113,18 @@
      main > pre {
        margin: unset;
        line-height: unset;
-       background: #f5f5f5;
-       /* color: #0069d6; */
+       background: rgba(240,240,235,.4);
        overflow: auto;
        padding: 10px;
-       /* display: inline-block; */
      }
      /* main > pre > code.language-unknown { */
      code {
        font-family: 'menlo', monospace;
      }
+     main > pre,
      main > pre > code {
-       /* background-color: unset; */
+       font-family: 'menlo', monospace;
+       font-size: 0.9em;
      }
      :not(pre) > code {
        background-color: #fee9cc;
@@ -196,14 +203,32 @@
          display: block;
        }
      }
-     @media only screen and (min-width: 1000px) {
+     @media only screen and (min-width: 768px) {
        main {
-         margin:15px 15px 0 250px;
+         margin:0 20px;
          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
        }
        main > * {
+         margin-left: var(--main-margin-medium);
+         margin-right: var(--main-margin-medium);
+       }
+       main > h2, main > h3, main > h4 {
+         margin-left: unset;
+       }
+       main > pre {
+         padding-left: var(--main-margin-medium);
+       }
+       .section-number {
+         width: var(--main-margin-medium);
+       }
+     }
+     @media only screen and (min-width: 1000px) {
+       main {
+         margin:15px 15px 0 250px;
+       }
+       main > * {
          max-width: 648px;
-         margin-left: 80px;
+         margin-left: var(--main-margin-normal);
          /* padding: 0; */
        }
        h1, h2, h3 {
@@ -213,10 +238,10 @@
          max-width: 1000px;
        }
        .section-number {
-         width: 80px;
+         width: var(--main-margin-normal);
        }
        .table-container {
-         margin-left: 80px;
+         margin-left: var(--main-margin-normal);
          overflow-x: visible;
        }
        main > pre {
@@ -224,7 +249,7 @@
          min-width: 648px;
          margin-left: unset;
          width: fit-content;
-         padding-left: 80px;
+         padding-left: var(--main-margin-normal);
          padding-right: 10px;
        }
        table {

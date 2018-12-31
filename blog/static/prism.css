@@ -8,14 +8,14 @@ https://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javasc
 
 code[class*="language-"],
 pre[class*="language-"] {
-	color: black;
+    color: #444;
 	background: none;
 	text-shadow: 0 1px white;
 	white-space: pre;
 	word-spacing: normal;
 	word-break: normal;
 	word-wrap: normal;
-	/* line-height: 1.5; */
+	line-height: 1.5;
 
 	-moz-tab-size: 4;
 	-o-tab-size: 4;
@@ -27,16 +27,19 @@ pre[class*="language-"] {
 	hyphens: none;
 }
 
+code[class="language-unknown"] {
+  line-height: 1;
+}
+
+
 pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
 code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
 	text-shadow: none;
-	background: #b3d4fc;
 }
 
 pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
 code[class*="language-"]::selection, code[class*="language-"] ::selection {
 	text-shadow: none;
-	background: #b3d4fc;
 }
 
 @media print {
@@ -69,7 +72,9 @@ pre[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-	color: slategray;
+	/* color: slategray; */
+	/* color: #a0a1a7; */
+	color: #c0c1c7;
 }
 
 .token.punctuation {
@@ -105,13 +110,13 @@ pre[class*="language-"] {
 .language-css .token.string,
 .style .token.string {
 	color: #9a6e3a;
-	background: hsla(0, 0%, 100%, .5);
 }
 
 .token.atrule,
 .token.attr-value,
 .token.keyword {
 	color: #07a;
+    font-weight: bold;
 }
 
 .token.function,

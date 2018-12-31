@@ -10,9 +10,10 @@ const cache = {
              };
 
 my %site_info = (
-                 front_end => [qw/HTML CSS Javascript/],
-                  back_end => [qw/Nodejs Express Org-js MongoDB/],
-                      desc => <a href='/post/TYZOX7'>link</a>
+                 front_end => [qw| HTML CSS Javascript        |],
+                  back_end => [qw| Nodejs Express MongoDB     |],
+                    credit => [qw| Org-js Prismjs GoogleFonts |],
+                      desc => <a href='/post/TYZOX7'>link</a>,
                 repository => <a href='https://github.com/whitemuu/nodeblog' target='_blank'>'whitemuu/nodeblog'</a>
                 );</code></pre><div></div>`, 'About | nichijou']
 }
