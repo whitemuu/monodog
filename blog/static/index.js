@@ -7,76 +7,111 @@ const cache = {
                  name angus_zhang
               twitter <a href="https://twitter.com/nichijou_lab" target="_blank">nichijou_lab</a>
                 email angusbike@gmail.com
+                 desc flag必中型命格，眼高手低
+                motto 自律，不装，兼爱
              };
 
 my %site_info = (
                  front_end => [qw| HTML CSS Javascript        |],
                   back_end => [qw| Nodejs Express MongoDB     |],
                     credit => [qw| Org-js Prismjs GoogleFonts |],
-                      desc => <a href='/post/TYZOX7'>link</a>,
-                repository => <a href='https://github.com/whitemuu/nodeblog' target='_blank'>'whitemuu/nodeblog'</a>
+                      desc => '<a href='/post/TYZOX7'>link</a>',
+                repository => '<a href='https://github.com/whitemuu/nodeblog' target='_blank'>whitemuu/nodeblog</a>'
                 );</code></pre><div></div>`, 'About | nichijou']
 }
 // age ${new Date().getFullYear() - 1991}
-
-
-function fetchAndSetMain(url, manipulate) {
-  // console.log(url);
-  fetch(url)
-    .then(res => {
-      if (res.status !== 200) {
-        return Promise.reject('not found')
-      }
-      return res.json()
-    })
-    .then(json => manipulate(json))
-    .then(content => {main.innerHTML = content; cache[url][0] = content})
-    .catch(err => console.log(err))
-}
 
 function genTagsHtml(tags){
   return '<div class="tags">' + tags.split(' ').reduce((sum, tag) => `${sum}<span id='${tag}'>${tag}</span>`,'') + '</div>'
 }
 
+function genCreated(name) {
+  return `20${name.substr(0,2)}-${name.substr(2,2)}-${name.substr(4,2)}`
+}
+
+const bindSectionJump = () =>
+      Array.from(document.getElementsByClassName("section-number")).forEach(sectionNumber => {
+        sectionNumber.onclick = () =>
+          document.getElementById('header-' + sectionNumber.innerText.replace(/\./g,"-")).scrollIntoView({behavior: 'smooth', block: 'start'});
+      })
+
+function f404(){
+  main.innerHTML = "<div style='color:rgb(50, 50, 50, 20%);font:italic 5em sans-serif;'>404</div><p>Your link is invalid or I've deleted the resource. Sorry for either case.</p>"
+}
+
 function route(path) {
-  // console.log(this);
+
   if(path) window.history.pushState(null, null, path)
   else path = window.location.pathname
 
-  // no other 6/7 chars path!!
-  path = path.replace(/(\w{6,7})/, (match, p1) => parseInt(p1, 36).toString())
-
   let hit = cache['/api' + path];
-  // console.log(hit);
+
   if (hit) {
     main.innerHTML = hit[0];
     document.title = hit[1];
-  }else if (path === '/' || path === '/posts') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return
+  }
 
-    fetchAndSetMain('/api/posts', posts => {
-      document.title = 'Posts | nichijou'
-      cache['/api/posts'] = []
-      cache['/api/posts'][1] = 'Posts | nichijou'
-      return posts.reduce((sum, post) => {
-        post.name = parseInt(post.name.substr(0, 10)).toString(36).toUpperCase()
-        return `${sum}<h1 style="font:lighter 1.5em sans-serif;margin-top:2em;"><a href="/post/${post.name}" onclick="route('/post/${post.name}'); return false">${post.title}</a></h1>
-${genTagsHtml(post.tags)}`},'')
-    })
+  if (path === '/' || path === '/posts') {
 
-  } else if(/^\/post\/\d{10}$/.test(path)) {
+    ;(async () => {
+      try {
+        const res = await fetch('/api/posts')
+        if (res.status !== 200) return f404()
+        const posts = await res.json()
 
-    const url = '/api' + path
-    fetchAndSetMain(url, post => {
-      document.title = post.title
-      cache[url] = []
-      cache[url][1] = post.title
-      return `<h1>${post.title}</h1>${genTagsHtml(post.tags)}
-${post.content}<div id='eof'>✣</div>`})
+        document.title = 'Posts | nichijou'
+        cache['/api/posts'] = []
+        cache['/api/posts'][1] = 'Posts | nichijou'
+        const contents = posts.reduce((sum, post) => {
+          let path = `/post/${post.title.replace(/ /g, '-')}-${parseInt(post.name.substr(0, 10)).toString(36)}`
+          return `${sum}<div class="entry"><h1 style="font:lighter 1.5em sans-serif;margin-top:2em;">
+<a href="${path}" onclick="route('${path}'); return false">${post.title}</a></h1>
+<div class="date">${genCreated(post.name)}</div>
+${genTagsHtml(post.tags)}</div>`},'')
+        main.innerHTML = contents
+        cache['/api/posts'][0] = contents
+        // window.scrollTo({ top: 0, behavior: 'smooth' })
+      } catch (e) {
+        console.log(e)
+      }
+    })()
+
+  } else if(path.startsWith('/post/')) {
+
+    const url = '/api/post/' + parseInt(path.substr(path.lastIndexOf('-') + 1), 36)
+
+    ;(async () => {
+      hit = cache[url]
+      if (hit) {
+        main.innerHTML = hit[0];
+        document.title = hit[1];
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        try {
+          const res = await fetch(url)
+          if (res.status !== 200) return f404()
+          const post = await res.json()
+
+          document.title = post.title
+          cache[url] = []
+          cache[url][1] = post.title
+          let content = `<h1>${post.title}</h1>${genTagsHtml(post.tags)}
+<div id="meta"><a href="${post.html_url}" target="_blank">${genCreated(post.name)}</a></div>
+${post.content}<div id='eof'>✣</div>`
+          window.history.pushState(null, null, `/post/${post.title.replace(/ /g, '-')}-${parseInt(post.name.substr(0, 10)).toString(36)}`)
+          main.innerHTML = content
+          cache[url][0] = content
+        } catch (e) {
+          console.log(e)
+        }
+      }
+      bindSectionJump()
+    })()
 
   } else {
-
-    main.innerHTML = "<div style='color:rgb(50, 50, 50, 20%);font:italic 5em sans-serif;'>404</div><p>Your link is invalid or I've deleted the resource. Sorry for either case.</p>"
-
+    f404()
   }
 }
 

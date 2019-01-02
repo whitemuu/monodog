@@ -33,7 +33,7 @@ exports.insertMany = (docs) => getCollection().then(([cli, collection]) => {
 
 exports.findAll = () => getCollection().then(([cli, collection]) => {
   try {
-    return collection.find({}).project({name: 1,sha: 1,tags: 1, title: 1, _id: 0}).toArray()
+    return collection.find({}).project({name: 1,sha: 1,tags: 1, title: 1, _id: 0}).sort({name: -1}).toArray()
   } finally{
     cli.close()
   }

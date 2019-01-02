@@ -45,6 +45,7 @@ function genNew(post) {
         .replace(/<img src="\.\./g, '<img src="https://raw.githubusercontent.com/whitemuu/blog/master')
         .replace(/&#39;/g, "'") // org-js's odd behavior, I've to replace 'em
         .replace(/&#34;/g, '"')
+        .replace(/(\s)(=|~)(['"].*?|.*?['"])\2(\s)/g, `$1<code>$3</code>$4`)
         .replace(/<code class="language-(.+)">([\s\S]*?)<\/code>/g, (match, p1, p2) => {
           try {
             return `<code class="language-${p1}">${Prism.highlight(p2, Prism.languages[p1], p1)}<\/code>`
