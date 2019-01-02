@@ -37,19 +37,27 @@
      }
 
      #meta {
-     /* position: fixed; */
-     /* right: 30px; */
-       text-align: right;
+       /* font-family: cursive; */
+       font-style: italic;
+       /* font-weight: bold; */
+       font-size: 0.9em;
      }
      .date {
        /* position: relative; */
        float: right;
        color: #999;
        padding-bottom: 0;
+
+       /* background: #eee; */
+       padding: 0px 4px 0px;
+       margin: 2px;
+       border-radius: 4px;
+       border: 1px dashed #999;
+
      }
      .entry {
        border-bottom: 1px dashed #999;
-       padding-bottom: 5px;
+       /* padding-bottom: 5px; */
      }
 
      nav > ul {
@@ -183,6 +191,7 @@
        padding: 0px 5px 2px;
        margin: 2px;
        border-radius: 4px;
+       display: inline-block;
      }
      blockquote {
        color: #888;
@@ -210,6 +219,10 @@
        color: #a4b9ce;
      }
      @media only screen and (max-width: 999px) {
+       header {
+         margin-top: 20px;
+         margin-bottom: 5px;
+       }
        .img-container {
          margin: 0;
          /* display: flex; */
@@ -293,7 +306,7 @@
          display: unset;
        }
        nav > ul > li {
-         margin-left: 50px;
+         margin-left: 65px;
          display: block;
          font-size: 2em;
        }
@@ -315,7 +328,7 @@
          padding-right: 50px;
          text-align: right;
        }
-       header{
+       header {
          justify-content: flex-end;
        }
      }
@@ -334,11 +347,9 @@
       <main>
       </main>
       <header>
-        <a href="/">
+        <a href="/" onclick="route('/posts'); return false">
           <!-- <img src="/img/nano.jpg" alt="" height="150px"/> -->
-          <img src="/img/ガキ.png" alt="" height="150px"/>
-          <!-- <img src="/img/good-for-health-bad-for-education.png" alt="" height="150px"/> -->
-          <!-- <img src="/img/framed-1.jpg" alt="" height="150px"/> -->
+          <img src="/img/ガキ.png" alt="" height="120px"/>
         </a>
       </header>
       <footer>

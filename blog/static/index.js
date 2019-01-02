@@ -1,8 +1,7 @@
 const main = document.getElementsByTagName('main')[0];
 
 const cache = {
-  '/api/tags': ['<p>工事中</p>', 'Tags | nichijou'],
-  '/api/tutor': ['<p>工事中</p>', 'Tutors | nichijou'],
+  '/api/tutor': ['<img src="/img/工事中アイコン.svg" width="150px" style="margin-top:80px"/>', 'Tutors | nichijou'],
   '/api/about': [`<h2 style="font-size:50px;color:#eee">ABOUT</h2><pre><code class='language-perl'>my %info = qw{
                  name angus_zhang
               twitter <a href="https://twitter.com/nichijou_lab" target="_blank">nichijou_lab</a>
@@ -78,9 +77,36 @@ ${genTagsHtml(post.tags)}</div>`},'')
       }
     })()
 
+  } else if(path === '/tags') {
+
+    ;(async () => {
+      try {
+        const res = await fetch('/api/tags')
+        if (res.status !== 200) return f404()
+        let tags = await res.text()
+        tags = tags.split(' ').reduce((sum, tag) => {
+          sum[tag] = sum[tag] ? sum[tag] + 1 : 1
+          return sum
+        } , {})
+
+        tags = Object.keys(tags).reduce((sum, tag) => `${sum}<span id="${tag}" style="font-size:${15 + tags[tag] * 2}px">${tag}</span>`, '')
+        // console.log(tags);
+        tags = `<div id="tags-container" class='tags' style="margin-top:80px">${tags}</div>`
+        main.innerHTML = tags
+
+        cache['/api/tags'] = []
+        cache['/api/tags'][0] = tags
+        cache['/api/tags'][1] = 'Tags | nichijou'
+
+      } catch (e) {
+        console.log(e)
+      }
+    })()
+
   } else if(path.startsWith('/post/')) {
 
     const url = '/api/post/' + parseInt(path.substr(path.lastIndexOf('-') + 1), 36)
+    // const url = '/api/post/' + parseInt(path.match(/[\/-][a-z0-9]{6}/).substr(1), 36)
 
     ;(async () => {
       hit = cache[url]
@@ -98,9 +124,12 @@ ${genTagsHtml(post.tags)}</div>`},'')
           cache[url] = []
           cache[url][1] = post.title
           let content = `<h1>${post.title}</h1>${genTagsHtml(post.tags)}
-<div id="meta"><a href="${post.html_url}" target="_blank">${genCreated(post.name)}</a></div>
+<div id="meta">Created: <a href="${post.html_url}" target="_blank">${genCreated(post.name)}</a> by Angus Zhang</div>
 ${post.content}<div id='eof'>✣</div>`
-          window.history.pushState(null, null, `/post/${post.title.replace(/ /g, '-')}-${parseInt(post.name.substr(0, 10)).toString(36)}`)
+          let newPath = `/post/${post.title.replace(/ /g, '-')}-${parseInt(post.name.substr(0, 10)).toString(36)}`
+          if (window.location.pathname !== newPath) {
+            window.history.pushState(null, null, newPath)
+          }
           main.innerHTML = content
           cache[url][0] = content
         } catch (e) {

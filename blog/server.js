@@ -14,6 +14,13 @@ app.get('/api/posts', (req, res) => {
   }).catch(err => res.status(500).send('err ' + err))
 })
 
+app.get('/api/tags', (req, res) => {
+  dao.findAll().then(docs => {
+    let tags = docs.map(e => e.tags).join(' ')
+    res.send(tags)
+  }).catch(err => res.status(500).send('err ' + err))
+})
+
 app.get('/api/post/:id',  (req, res) => {
   // search post with id in mongodb
   dao.findOne({name: req.params.id + '.org'})
