@@ -37,10 +37,11 @@
      }
 
      #meta {
-       /* font-family: cursive; */
        font-style: italic;
-       /* font-weight: bold; */
        font-size: 0.9em;
+     }
+     #meta > a > img {
+       vertical-align: text-bottom;
      }
      .date {
        /* position: relative; */
@@ -123,6 +124,11 @@
        color: #0069d6;
        text-decoration: none;
      }
+     a:hover {
+       /* background: #eee; */
+       box-shadow: 0 1px 5px 3px rgba(0, 0, 0, 0.10);
+       border-radius: 3px;
+     }
      ol, ul {
        box-sizing: border-box;
        /* margin-left: 40px; */
@@ -142,6 +148,11 @@
        background: rgba(240,240,235,.4);
        overflow: auto;
        padding: 10px 15px;
+     }
+     pre.infopre {
+       background: unset;
+       color: #aaa;
+       margin-top: 80px;
      }
      /* main > pre > code.language-unknown { */
      code {
@@ -183,6 +194,7 @@
      .tags {
        /* margin-top: 0; */
        margin-bottom: 5px;
+       display: inline-block;
      }
      .tags > span {
        /* background:#ECCB6B; */
@@ -223,12 +235,16 @@
          margin-top: 20px;
          margin-bottom: 5px;
        }
+       header img{
+         margin: auto;
+         display: block;
+       }
        .img-container {
          margin: 0;
          /* display: flex; */
          /* flex will stretch img */
        }
-       img {
+       .img-container > img {
          max-width: 100%;
          margin: auto;
          display: block;
