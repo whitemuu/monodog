@@ -2,11 +2,11 @@ const MongoClient = require('mongodb').MongoClient
 const assert = require('assert');
 const fetch = require('node-fetch')
 
-const url = `mongodb://${process.env.MONGODOMAIN || 'mongodb'}:27017`
+const url = `mongodb://${process.env.MONGODOMAIN || 'localhost'}:27017`
 
-function getCollection() {
+function getCollection(collection) {
   return new MongoClient(url, { useNewUrlParser: true })
-    .connect().then(cli => [cli, cli.db('blog').collection('posts')]);
+    .connect().then(cli => [cli, cli.db('blog').collection(collection)]);
 }
 
 // TODO
@@ -22,16 +22,16 @@ function getCollection() {
 
 // exports.findAlll = () => conduct(MongoClient.f)
 
-exports.insertOne = (doc) => getCollection().then(([cli, collection]) => {
+exports.insertOne = (doc, collection) => getCollection(collection).then(([cli, collection]) => {
   return collection.insertOne(doc).finally(cli.close())
 })
 
-exports.insertMany = (docs) => getCollection().then(([cli, collection]) => {
+exports.insertMany = (docs, collection) => getCollection(collection).then(([cli, collection]) => {
   return collection.insertMany(docs)
     .finally(() => cli.close())
 })
 
-exports.findAll = () => getCollection().then(([cli, collection]) => {
+exports.findAll = (collection) => getCollection(collection).then(([cli, collection]) => {
   try {
     return collection.find({}).project({name: 1,sha: 1,tags: 1, title: 1, _id: 0}).sort({name: -1}).toArray()
   } finally{
@@ -39,7 +39,7 @@ exports.findAll = () => getCollection().then(([cli, collection]) => {
   }
 })
 
-exports.findOne = (query) => getCollection().then(([cli, collection]) => {
+exports.findOne = (query, collection) => getCollection(collection).then(([cli, collection]) => {
   try {
     return collection.find(query).toArray().then(array => array[0])
   } finally{
@@ -47,17 +47,18 @@ exports.findOne = (query) => getCollection().then(([cli, collection]) => {
   }
 })
 
-exports.updateOne = (query, post) => getCollection().then(([cli, posts]) => {
+exports.updateOne = (query, entry, collection) => getCollection(collection).then(([cli, collection]) => {
   try {
-    return posts.updateOne(query, post)
+    return collection.updateOne(query, entry)
   }finally{
     cli.close()
   }
 })
 
-exports.deleteOne = (doc) => getCollection().then(([cli, posts]) => {
+exports.deleteOne = (name, collection) => getCollection(collection).then(([cli, collection]) => {
   try {
-    return posts.deleteOne(doc)
+    name = (value => ({name: value}))(name)
+    return collection.deleteOne(name)
   }finally{
     cli.close()
   }

@@ -1,7 +1,6 @@
 const main = document.getElementsByTagName('main')[0]
 
 const cache = {
-  '/api/tutor': ['<object type="image/svg+xml" data="/img/工事中アイコン.svg" width="150px" style="margin-top:80px">Your browser does not support SVG</object>', 'Tutors | nichijou'],
   '/api/about': [`<pre class="infopre">my %info = qw{<span style="font-size:1.2em;color:#555;">
               name angus_zhang
            twitter <a href="https://twitter.com/nichijou_lab" target="_blank">nichijou_lab</a>
@@ -40,10 +39,18 @@ function f404(){
   main.innerHTML = "<div style='color:rgb(50, 50, 50, 20%);font:italic 5em sans-serif;'>404</div><p>Your link is invalid or I've deleted the resource. Sorry for either case.</p>"
 }
 
+function loadingEffect() {
+  main.innerHTML += '<div id="animation-container"><div class="lds-hourglass"></div></div>'
+}
+
 function route(path) {
 
-  if(path) window.history.pushState(null, null, path)
-  else path = window.location.pathname
+  if(path) {
+    if (path === window.location.pathname) return
+    window.history.pushState(null, null, path)
+  } else path = window.location.pathname
+
+
 
   let hit = cache['/api' + path]
 
@@ -54,8 +61,11 @@ function route(path) {
     return
   }
 
+
   if (path === '/' || path === '/posts') {
 
+    loadingEffect()
+    // setTimeout(() => {
     ;(async () => {
       try {
         const res = await fetch('/api/posts')
@@ -80,9 +90,39 @@ function route(path) {
         console.log(e)
       }
     })()
+    // }, 100000)
+
+  } else if(path === '/notes') {
+
+    loadingEffect()
+    ;(async () => {
+      try {
+        const res = await fetch('/api/notes')
+        if (res.status !== 200) return f404()
+        const notes = await res.json()
+
+        document.title = 'Tutor | nichijou'
+        cache['/api/notes'] = []
+        cache['/api/notes'][1] = 'Tutor | nichijou'
+
+        let contents = notes.reduce((sum, post) => {
+          let path = `/post/${post.title.replace(/ /g, '-')}-${parseInt(post.name.substr(0, 10)).toString(36)}`
+          return `${sum}<span>\n  (${genCreated(post.name)} '(<a href="${path}" style="font-size:1.5em" onclick="route('${path}'); return false">${post.title}</a>)
+              :tags ${genTagsHtml(post.tags)})</span>`},'')
+
+        contents = `<pre class="infopre">(contents${contents || '\n  nil'})</pre>`
+
+        main.innerHTML = contents
+        cache['/api/notes'][0] = contents
+
+      } catch (e) {
+        console.log(e)
+      }
+    })()
 
   } else if(path === '/tags') {
 
+    loadingEffect()
     ;(async () => {
       try {
         const res = await fetch('/api/tags')
@@ -112,6 +152,7 @@ function route(path) {
     const url = '/api/post/' + parseInt(path.substr(path.lastIndexOf('-') + 1), 36)
     // const url = '/api/post/' + parseInt(path.match(/[\/-][a-z0-9]{6}/).substr(1), 36)
 
+    loadingEffect()
     ;(async () => {
       hit = cache[url]
       if (hit) {

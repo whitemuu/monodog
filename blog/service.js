@@ -7,28 +7,29 @@ loadLanguages(['lisp', 'haskell', 'java', 'lua']);
 
 const parser = new org.Parser();
 
-exports.addPost = function (post) {
-  genNew(post).then(post => {
-    dao.insertOne(post).then(re => console.log(re.n + ' ' + post.name +' instered')).catch(e => console.log(e))
+exports.addEntry = function (name, collection) {
+  genNew(name, collection).then(entry => {
+    dao.insertOne(entry, collection).then(re => console.log(re.n + ' ' + entry.name +' instered')).catch(e => console.log(e))
   }).catch(err => console.error(err))
 }
 
 // exports.addPost({name: '1812111403.org', sha: 'jjj'})
-exports.updatePost = function (post) {
-  genNew(post).then(post => {
-    dao.updateOne({name: post.name}, {$set: post})
+exports.updateEntry = function (name, collection) {
+  genNew(name, collection).then(entry => {
+    dao.updateOne({name: entry.name}, {$set: entry}, collection)
   }).catch(err => console.error(err))
 }
 
 
-function genNew(post) {
-  return fetch('https://raw.githubusercontent.com/whitemuu/blog/master/posts/' + post.name)
-    .then(res => res.text())
-    .then(article => {
+function genNew(name, collection) {
+  // return fetch(`https://raw.githubusercontent.com/whitemuu/blog/master/${collection}/${entry.name}`)
+  return fetch(`https://api.github.com/repos/whitemuu/blog/contents/${collection}/${name}?ref=master`)
+    .then(res => res.json())
+    .then(entry => {
 
       // const regex = /#\+TAGS:\ *(.+)\n/;
       // let tags = regex.exec(article)[1]
-      const orgDocument = parser.parse(article)
+      const orgDocument = parser.parse(Buffer.from(entry.content, 'base64').toString('utf-8'))
       const orgHTMLDocument = orgDocument.convert(org.ConverterHTML, {
         headerOffset: 1,
         exportFromLineNumber: false,
@@ -36,11 +37,11 @@ function genNew(post) {
         suppressAutoLink: true
       })
 
-      post = (({name, sha, html_url}) => ({name, sha, html_url}))(post)
-      post.tags = orgDocument.directiveValues['tags:']
-      post.title = orgDocument.title
-      post.content = orgHTMLDocument.contentHTML
-      post.content = post.content.replace(/<table>/g, '<div class="table-container"><table>').replace(/<\/table>/g, '<\/table><\/div>')
+      entry = (({name, sha, html_url}) => ({name, sha, html_url}))(entry)
+      entry.tags = orgDocument.directiveValues['tags:']
+      entry.title = orgDocument.title
+      entry.content = orgHTMLDocument.contentHTML
+      entry.content = entry.content.replace(/<table>/g, '<div class="table-container"><table>').replace(/<\/table>/g, '<\/table><\/div>')
         .replace(/<p><img/g, '<p class="img-container"><img')
         .replace(/<img src="\.\./g, '<img src="https://raw.githubusercontent.com/whitemuu/blog/master')
         .replace(/&#39;/g, "'") // org-js's odd behavior, I've to replace 'em
@@ -54,8 +55,8 @@ function genNew(post) {
           }
           return match
         })
-      post.toc = orgHTMLDocument.tocHTML
-      return post
+      entry.toc = orgHTMLDocument.tocHTML
+      return entry
     })
     .catch(err => console.error(err))
 }

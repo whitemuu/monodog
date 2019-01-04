@@ -14,12 +14,13 @@
        /* --main-margin-small: 15px; */
        --main-margin-medium: 40px;
        --main-margin-normal: 80px;
+       --main-orange: #ECCB6B;
      }
 
      body {
        margin: 0;
        /* background: #f2f2f2; */
-       background: #ECCB6B;
+       background: var(--main-orange);
        /* background: #34495e; */
        /* background: #fefefe; */
        /* background: #143ACF; */
@@ -230,6 +231,14 @@
        display: block;
        color: #a4b9ce;
      }
+
+     div#animation-container {
+       /* position: absolute; */
+       position: fixed;
+       margin: 0;
+       /* padding-left: 50vw; */
+       top: 15px;
+     }
      @media only screen and (max-width: 999px) {
        header {
          margin-top: 20px;
@@ -249,6 +258,10 @@
          margin: auto;
          display: block;
        }
+       div#animation-container {
+         top: 44px;
+       }
+
      }
      @media only screen and (min-width: 768px) {
        main {
@@ -348,6 +361,38 @@
          justify-content: flex-end;
        }
      }
+
+     /*animation*/
+     .lds-hourglass {
+       display: inline-block;
+       position: relative;
+       width: 64px;
+       height: 64px;
+     }
+     .lds-hourglass:after {
+       content: " ";
+       display: block;
+       border-radius: 50%;
+       width: 0;
+       height: 0;
+       margin: 6px;
+       box-sizing: border-box;
+       border: 16px solid #fff;
+       border-color: var(--main-orange) transparent var(--main-orange) transparent;
+       animation: lds-hourglass 1.2s infinite;
+     }
+     @keyframes lds-hourglass {
+       0% {
+         transform: rotate(0);
+         animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+       }
+       50% {
+         transform: rotate(900deg);
+         animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+       }
+       100% {
+         transform: rotate(1800deg);
+       }
     </style>
   </head>
   <body>
@@ -355,7 +400,7 @@
       <ul>
         <li><a href="/posts" onclick="route('/posts'); return false">POSTS</a></li>
         <li><a href="/tags" onclick="route('/tags'); return false">TAGS</a></li>
-        <li><a href="/tutor" onclick="route('/tutor'); return false">TUTOR</a></li>
+        <li><a href="/notes" onclick="route('/notes'); return false">TUTOR</a></li>
         <!-- <li><a href="#">BLOGROLL</a></li> -->
         <li><a href="/about" onclick="route('/about'); return false">ABOUT</a></li>
       </ul>
