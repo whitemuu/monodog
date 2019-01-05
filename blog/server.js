@@ -29,13 +29,11 @@ app.get('/api/tags', (req, res) => {
 })
 
 app.get('/api/post/:id',  (req, res) => {
-  // search post with id in mongodb
   dao.findOne({name: req.params.id + '.org'}, 'posts')
     .then(post => {
       if (post === undefined) return res.status(404).send('no such post')
       res.send(post)
     })
-  // save and send to res
 })
 
 function mirrorToMongo(entriesInGit, entriesInMon, collection) {
@@ -48,7 +46,6 @@ function mirrorToMongo(entriesInGit, entriesInMon, collection) {
   // add
   const toAdd = Object.keys(egs).filter(key => ems[key] === undefined)
   if (toAdd.length !== 0) {
-    // TODO is addPost return immediately?
     console.log('toAdd ' + toAdd.join(' '));
     toAdd.forEach(name => service.addEntry(name, collection))
   } else{ console.log('non to add') }
@@ -132,4 +129,4 @@ app.get('/*', (req, res) => {
 })
 
 const port = process.env.PORT || 80
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`App listening on port ${port}!`))

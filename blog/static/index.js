@@ -19,6 +19,44 @@ my %site_info = (<span style="font-size:1.2em;color:#555;">
 }
 // age ${new Date().getFullYear() - 1991}
 
+// karasu begin ---------------------------------------------
+const karasu = document.getElementById('top')
+const foothold = document.getElementById('foothold')
+
+// DOMMouseScroll for firefox
+;['mousewheel', 'DOMMouseScroll'].forEach( e => {
+  window.addEventListener(e, () => {
+    if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+      karasu.style.display = "block"
+      foothold.style.display = "block"
+    } else {
+      karasu.style.display = "none"
+      foothold.style.display = "none"
+    }
+  })
+})
+
+function fly() {
+  karasu.style.transform = "rotate(64deg)"
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+  foothold.style.animationName='drop'
+  setTimeout(() => {
+    foothold.style.display = "none"
+    foothold.style.animationName=''
+  }, 400)
+}
+
+window.onscroll = () => {
+  if (document.documentElement.scrollTop < 500 && karasu.style.display === "block") {
+    karasu.style.animationName='fly'
+    setTimeout(() => {
+      karasu.style.animationName=''
+      karasu.style.display = "none"
+      karasu.style.transform = ""
+    }, 800)
+  }
+}
+// karasu end-------------------------------------------------
 function genTagsHtml(tags){
   // TODO
   if (tags === undefined) return ''
@@ -33,6 +71,7 @@ const bindSectionJump = () =>
       Array.from(document.getElementsByClassName("section-number")).forEach(sectionNumber => {
         sectionNumber.onclick = () =>
           document.getElementById('header-' + sectionNumber.innerText.replace(/\./g,"-")).scrollIntoView({behavior: 'smooth', block: 'start'})
+        sectionNumber.style.cursor = 'pointer'
       })
 
 function f404(){
@@ -61,7 +100,7 @@ function route(path) {
     return
   }
 
-
+  /* jshint ignore:start */
   if (path === '/' || path === '/posts') {
 
     loadingEffect()
@@ -110,7 +149,7 @@ function route(path) {
           return `${sum}<span>\n  (${genCreated(post.name)} '(<a href="${path}" style="font-size:1.5em" onclick="route('${path}'); return false">${post.title}</a>)
               :tags ${genTagsHtml(post.tags)})</span>`},'')
 
-        contents = `<pre class="infopre">(contents${contents || '\n  nil'})</pre>`
+        contents = `<pre class="infopre">(notes${contents || '\n  nil'})</pre>`
 
         main.innerHTML = contents
         cache['/api/notes'][0] = contents
@@ -189,6 +228,8 @@ ${post.content}<div id='eof'>✣</div>`
   } else {
     f404()
   }
+  /* jshint ignore:end */
+
 }
 
 window.onpopstate = () => {

@@ -40,6 +40,8 @@
      #meta {
        font-style: italic;
        font-size: 0.9em;
+       font-family: serif;
+       margin-bottom: 3.5em;
      }
      #meta > a > img {
        vertical-align: text-bottom;
@@ -261,7 +263,9 @@
        div#animation-container {
          top: 44px;
        }
-
+       img#top, img#foothold {
+         display: none;
+       }
      }
      @media only screen and (min-width: 768px) {
        main {
@@ -344,6 +348,49 @@
          width: 250px;
          bottom: 0;
        }
+       img#top, img#foothold {
+         transition: 0.70s;
+         -webkit-transition: 0.70s;
+         -moz-transition: 0.70s;
+         -ms-transition: 0.70s;
+         -o-transition: 0.70s;
+         width: 60px;
+         position: fixed;
+         right: 40px;
+         bottom: 20px;
+         display: none;
+         animation-duration: 0.8s;
+       }
+       img#top:hover {
+         transition: 0.20s;
+         -webkit-transition: 0.20s;
+         -moz-transition: 0.20s;
+         -ms-transition: 0.20s;
+         -o-transition: 0.20s;
+         -webkit-transform: rotate(64deg);
+         -moz-transform: rotate(64deg);
+         -o-transform: rotate(64deg);
+         -ms-transform: rotate(64deg);
+         transform: rotate(64deg);
+       }
+       @keyframes fly {
+         /* from {right: 0px; bottom: 0px} */
+         to {bottom: 100vh; opacity: 0.1}
+       }
+       @keyframes drop {
+         /* from {right: 0px; bottom: 0px} */
+         to {bottom: -40px;}
+       }
+       @keyframes show {
+         /* from {right: 0px; bottom: 0px} */
+         from {right: -40px;}
+         to {right: 40px; }
+       }
+       @keyframes hide {
+         /* from {right: 0px; bottom: 0px} */
+         from {right: 40px;}
+         to {right: -40px;}
+       }
      }
      /* order matters */
      @media only screen and (min-width: 1600px) {
@@ -393,6 +440,7 @@
        100% {
          transform: rotate(1800deg);
        }
+     }
     </style>
   </head>
   <body>
@@ -407,6 +455,8 @@
       </nav>
       <main>
       </main>
+      <img id="foothold" src="/img/karasu-foothold.png"/>
+      <img id="top" onclick="fly()" alt="top" src="/img/karasu.png"/>
       <header>
         <a href="/" onclick="route('/posts'); return false">
           <!-- <img src="/img/nano.jpg" alt="" height="150px"/> -->
