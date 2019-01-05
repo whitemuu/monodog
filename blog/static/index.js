@@ -83,10 +83,14 @@ const bindSectionJump = () =>
       })
 
 function jump(anchorID) {
-  if (anchorID === '') return window.scrollTo({ top: 0, behavior: 'smooth' })
+  if (anchorID === ''){
+    document.title = document.getElementsByTagName('h1')[0].innerText
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    return
+  }
   const head = document.getElementById(anchorID)
   head.scrollIntoView({behavior: 'smooth', block: 'start'})
-  console.log(document.title)
+  // console.log(document.title)
   const i = document.title.indexOf('::')
   document.title = (i === -1? document.title : document.title.substr(0, i)) + '::' + head.innerText.replace(/\d+(\.\d+)*/,'')
 }
@@ -102,16 +106,16 @@ function loadingEffect() {
 let lastPath
 
 function route(path) {
-  // just push/pop(forward/backword) within page no need to reset main content
 
   if(path) {
     if (path === window.location.pathname) return
     window.history.pushState(null, null, path)
   } else path = window.location.pathname
 
+  // just push/pop(forward/backword) within page no need to reset main content
   if (location.pathname === lastPath) return jump(location.hash.substr(1))
 
-  // if (path.startsWith('/post/')) lastPath = path
+  lastPath = path
 
   let hit = cache['/api' + path]
 
