@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nichijou</title>
     <link href="/prism.css" rel="stylesheet" />
+    <!-- <link href="/highlightWord.css" rel="stylesheet" /> -->
     <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,600,700" rel="stylesheet"> -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,600" rel="stylesheet">
     <!-- <link href="/googlefonts.css" rel="stylesheet"> -->
@@ -264,7 +265,8 @@
          top: 44px;
        }
        img#top, img#foothold {
-         display: none;
+         /*won't affected by JS*/
+         display: none !important;
        }
      }
      @media only screen and (min-width: 768px) {

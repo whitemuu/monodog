@@ -21,17 +21,19 @@ my %site_info = (<span style="font-size:1.2em;color:#555;">
 
 // karasu begin ---------------------------------------------
 const karasu = document.getElementById('top')
-const foothold = document.getElementById('foothold')
+// why cannot name it foothold in ios/safari
+const karasuFoothold = document.getElementById('foothold')
 
 // DOMMouseScroll for firefox
+// why not scroll in the first time??
 ;['mousewheel', 'DOMMouseScroll'].forEach( e => {
   window.addEventListener(e, () => {
     if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
       karasu.style.display = "block"
-      foothold.style.display = "block"
+      karasuFoothold.style.display = "block"
     } else {
       karasu.style.display = "none"
-      foothold.style.display = "none"
+      karasuFoothold.style.display = "none"
     }
   })
 })
@@ -39,10 +41,12 @@ const foothold = document.getElementById('foothold')
 function fly() {
   karasu.style.transform = "rotate(64deg)"
   window.scrollTo({ top: 0, behavior: 'smooth' })
-  foothold.style.animationName='drop'
+  window.history.pushState(null, null, ' ')
+  document.title = document.title.substr(0, document.title.indexOf('::'))
+  karasuFoothold.style.animationName='drop'
   setTimeout(() => {
-    foothold.style.display = "none"
-    foothold.style.animationName=''
+    karasuFoothold.style.display = "none"
+    karasuFoothold.style.animationName=''
   }, 400)
 }
 
@@ -68,11 +72,24 @@ function genCreated(name) {
 }
 
 const bindSectionJump = () =>
-      Array.from(document.getElementsByClassName("section-number")).forEach(sectionNumber => {
-        sectionNumber.onclick = () =>
-          document.getElementById('header-' + sectionNumber.innerText.replace(/\./g,"-")).scrollIntoView({behavior: 'smooth', block: 'start'})
-        sectionNumber.style.cursor = 'pointer'
+      Array.from(document.getElementsByClassName("section-number")).forEach(sectionNumberElement => {
+        sectionNumberElement.onclick = () => {
+          // document.getElementById('header-' + sectionNumberElement.innerText.replace(/\./g,"-")).scrollIntoView({behavior: 'smooth', block: 'start'})
+          let anchor = 'header-' + sectionNumberElement.innerText.replace(/\./g,"-")
+          jump(anchor)
+          window.history.pushState(null, null, '#' + anchor) // direct set location.hash have effect
+        }
+        sectionNumberElement.style.cursor = 'pointer'
       })
+
+function jump(anchorID) {
+  if (anchorID === '') return window.scrollTo({ top: 0, behavior: 'smooth' })
+  const head = document.getElementById(anchorID)
+  head.scrollIntoView({behavior: 'smooth', block: 'start'})
+  console.log(document.title)
+  const i = document.title.indexOf('::')
+  document.title = (i === -1? document.title : document.title.substr(0, i)) + '::' + head.innerText.replace(/\d+(\.\d+)*/,'')
+}
 
 function f404(){
   main.innerHTML = "<div style='color:rgb(50, 50, 50, 20%);font:italic 5em sans-serif;'>404</div><p>Your link is invalid or I've deleted the resource. Sorry for either case.</p>"
@@ -82,14 +99,19 @@ function loadingEffect() {
   main.innerHTML += '<div id="animation-container"><div class="lds-hourglass"></div></div>'
 }
 
+let lastPath
+
 function route(path) {
+  // just push/pop(forward/backword) within page no need to reset main content
 
   if(path) {
     if (path === window.location.pathname) return
     window.history.pushState(null, null, path)
   } else path = window.location.pathname
 
+  if (location.pathname === lastPath) return jump(location.hash.substr(1))
 
+  // if (path.startsWith('/post/')) lastPath = path
 
   let hit = cache['/api' + path]
 
@@ -208,7 +230,7 @@ function route(path) {
           cache[url] = []
           cache[url][1] = post.title
           let content = `<h1>${post.title}</h1>${genTagsHtml(post.tags)}
-<div id="meta"><a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
+<div id="meta"><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
  <img alt="Creative Commons License" style="border-width:0;opacity:0.5" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a>
 Created: <a href="${post.html_url}" target="_blank">${genCreated(post.name)}</a> by Angus Zhang</div>
 ${post.content}<div id='eof'>✣</div>`
@@ -222,6 +244,10 @@ ${post.content}<div id='eof'>✣</div>`
           console.log(e)
         }
       }
+      // why set timeout 0 -> schedule after DOM manipulation
+      setTimeout(() => {
+        jump(window.location.hash.substr(1))
+      }, 0)
       bindSectionJump()
     })()
 
@@ -229,7 +255,6 @@ ${post.content}<div id='eof'>✣</div>`
     f404()
   }
   /* jshint ignore:end */
-
 }
 
 window.onpopstate = () => {
