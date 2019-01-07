@@ -71,6 +71,12 @@ function genCreated(name) {
   return `20${name.substr(0,2)}-${name.substr(2,2)}-${name.substr(4,2)}`
 }
 
+function gaCollect(pagePath) {
+  // https://stackoverflow.com/questions/54058464/what-does-gtagjs-new-date-do-in-snippet-proviced-by-gtag-js
+  // gtag('js', new Date());
+  gtag('config', 'UA-60584744-2', {'page_path': pagePath});
+}
+
 const bindSectionJump = () =>
       Array.from(document.getElementsByClassName("section-number")).forEach(sectionNumberElement => {
         sectionNumberElement.onclick = () => {
@@ -114,7 +120,6 @@ function route(path) {
 
   // just push/pop(forward/backword) within page no need to reset main content
   if (location.pathname === lastPath) return jump(location.hash.substr(1))
-
   lastPath = path
 
   let hit = cache['/api' + path]
@@ -123,6 +128,7 @@ function route(path) {
     main.innerHTML = hit[0]
     document.title = hit[1]
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    gaCollect(path)
     return
   }
 
@@ -151,6 +157,7 @@ function route(path) {
         main.innerHTML = contents
         cache['/api/posts'][0] = contents
         // window.scrollTo({ top: 0, behavior: 'smooth' })
+        gaCollect(path)
       } catch (e) {
         console.log(e)
       }
@@ -180,6 +187,8 @@ function route(path) {
         main.innerHTML = contents
         cache['/api/notes'][0] = contents
 
+        gaCollect(path)
+
       } catch (e) {
         console.log(e)
       }
@@ -207,6 +216,7 @@ function route(path) {
         cache['/api/tags'][0] = tags
         cache['/api/tags'][1] = 'Tags | nichijou'
 
+        gaCollect(path)
       } catch (e) {
         console.log(e)
       }
@@ -253,6 +263,8 @@ ${post.content}<div id='eof'>✣</div>`
         jump(window.location.hash.substr(1))
       }, 0)
       bindSectionJump()
+
+      gaCollect(path)
     })()
 
   } else {

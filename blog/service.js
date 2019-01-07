@@ -27,8 +27,6 @@ function genNew(name, collection) {
     .then(res => res.json())
     .then(entry => {
 
-      // const regex = /#\+TAGS:\ *(.+)\n/;
-      // let tags = regex.exec(article)[1]
       const orgDocument = parser.parse(Buffer.from(entry.content, 'base64').toString('utf-8'))
       const orgHTMLDocument = orgDocument.convert(org.ConverterHTML, {
         headerOffset: 1,
@@ -44,11 +42,16 @@ function genNew(name, collection) {
       entry.content = entry.content.replace(/<table>/g, '<div class="table-container"><table>').replace(/<\/table>/g, '<\/table><\/div>')
         .replace(/<p><img/g, '<p class="img-container"><img')
         .replace(/<img src="\.\./g, '<img src="https://raw.githubusercontent.com/whitemuu/blog/master')
-        .replace(/&#39;/g, "'") // org-js's odd behavior, I've to replace 'em
-        .replace(/&#34;/g, '"')
         .replace(/(\s)(=|~)(['"].*?|.*?['"])\2(\s)/g, `$1<code>$3</code>$4`)
         .replace(/<code class="language-(.+)">([\s\S]*?)<\/code>/g, (match, p1, p2) => {
           try {
+            p2 = p2
+              .replace(/&#34;/g, '"')
+              .replace(/&#38;/g, "&")
+              .replace(/&#39;/g, "'")
+              .replace(/&#60;/g, "<")
+              .replace(/&#62;/g, ">")
+
             return `<code class="language-${p1}">${Prism.highlight(p2, Prism.languages[p1], p1)}<\/code>`
           } catch(e) {
             console.log('未添加对 ' + p1 + " 支持")
