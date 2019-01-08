@@ -61,10 +61,32 @@ window.onscroll = () => {
   }
 }
 // karasu end-------------------------------------------------
+
+function slappingZero(num, length) {
+  return '0'.repeat(length - num.toString().length) + num
+}
+
+function encodeDate(str) {
+  const [year, month, day, hour] = str.match(/\d{2}/g)
+  const date = new Date('20' + year, month - 1, day, hour)
+  let startOfDate = new Date(date.getFullYear(), 0, 0)
+  let dayOfYear = Math.floor((date - startOfDate)/ (1000 * 60 * 60 * 24))
+  return parseInt(year + slappingZero((dayOfYear * 24 + date.getHours()).toString(), 4)).toString(36).toUpperCase()
+}
+
+function decodeDate(str) {
+  let date = parseInt(str, 36).toString()
+  let [, year, hours] = date.match(/(\d{2})(\d{4})/)
+  let days = Math.floor(hours / 24)
+  date = new Date((days * 24 * 60 * 60 * 1000) + (new Date('20' + year, 0, 0) - 0))
+  return year+ slappingZero(date.getMonth() + 1, 2) + slappingZero(date.getDate(), 2) + slappingZero((hours % 24), 2)
+}
+
 function genTagsHtml(tags){
   // TODO
   if (tags === undefined) return ''
-  return '<div class="tags">' + tags.split(' ').reduce((sum, tag) => `${sum}<span id='${tag}'>${tag}</span>`,'') + '</div>'
+  tags = '<div class="tags">' + tags.split(' ').reduce((sum, tag) => `${sum}<span id='${tag}'>${tag}</span>`,'') + '</div>'
+  return tags.replace(/recommend/g, '˗ˏˋrecommendˎˊ')
 }
 
 function genUrlTitle(title) {
@@ -78,6 +100,7 @@ function genCreated(name) {
 function gaCollect(pagePath) {
   // https://stackoverflow.com/questions/54058464/what-does-gtagjs-new-date-do-in-snippet-proviced-by-gtag-js
   // gtag('js', new Date());
+  // console.log(pagePath)
   gtag('config', 'UA-60584744-2', {'page_path': pagePath});
 }
 
@@ -117,7 +140,7 @@ function loadingEffect() {
 [...document.querySelectorAll('nav a'), ...document.querySelectorAll('header a')].forEach(e => {
   e.onclick = () => {
     // route(e.href)
-    console.log(e.getAttribute("href"))
+    // console.log(e.getAttribute("href"))
     route(e.getAttribute("href"))
     // style
     purgeActive()
@@ -185,11 +208,11 @@ function route(path) {
         cache['/api/posts'][1] = 'Posts | nichijou'
 
         let contents = posts.reduce((sum, post) => {
-          let path = `/post/${genUrlTitle(post.title)}-${parseInt(post.name.substr(0, 10)).toString(36)}`
+          let path = `/post/${encodeDate(post.name.substr(0, 8))}:${genUrlTitle(post.title)}`
           return `${sum}<span>\n  (${genCreated(post.name)} '(<a href="${path}" style="font-size:1.5em" onclick="route('${path}'); return false">${post.title}</a>)
               :tags ${genTagsHtml(post.tags)})</span>`},'')
 
-        contents = `<pre class="infopre">(contents${contents || '\n  nil'})</pre>`
+        contents = `<pre class="infopre">(posts${contents || '\n  nil'})</pre>`
 
         main.innerHTML = contents
         cache['/api/posts'][0] = contents
@@ -246,6 +269,7 @@ function route(path) {
 
         tags = Object.keys(tags).reduce((sum, tag) => `${sum}<span id="${tag}" style="font-size:${15 + tags[tag] * 2}px">${tag}</span>`, '')
         // console.log(tags)
+        tags = tags.replace(/recommend/g, '˗ˏˋrecommendˎˊ')
         tags = `<div id="tags-container" class='tags' style="margin-top:80px">${tags}</div>`
         main.innerHTML = tags
 
@@ -261,7 +285,7 @@ function route(path) {
 
   } else if(path.startsWith('/post/')) {
 
-    const url = '/api/post/' + parseInt(path.substr(path.lastIndexOf('-') + 1), 36)
+    const url = '/api/post/' + decodeDate(path.substr(6, 4))
     // const url = '/api/post/' + parseInt(path.match(/[\/-][a-z0-9]{6}/).substr(1), 36)
 
     purgeActive()
@@ -286,9 +310,9 @@ function route(path) {
  <img alt="Creative Commons License" style="border-width:0;opacity:0.5" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a>
 Created: <a href="${post.html_url}" target="_blank">${genCreated(post.name)}</a> by Angus Zhang</div>
 ${post.content}<div id='eof'>✣</div>`
-          let newPath = `/post/${genUrlTitle(post.title)}-${parseInt(post.name.substr(0, 10)).toString(36)}`
+          let newPath = `/post/${encodeDate(post.name.substr(0, 8))}/${genUrlTitle(post.title)}`
           if (window.location.pathname !== newPath) {
-            window.history.pushState(null, null, newPath)
+            window.history.replaceState(null, null, newPath)
           }
           main.innerHTML = content
           cache[url][0] = content
@@ -304,7 +328,7 @@ ${post.content}<div id='eof'>✣</div>`
       }
       bindSectionJump()
 
-      gaCollect(path)
+      gaCollect(path.substr(0, 10))
     })()
 
   } else {

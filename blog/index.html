@@ -25,6 +25,7 @@
        --main-margin-medium: 40px;
        --main-margin-normal: 80px;
        --main-orange: #ECCB6B;
+       --default-font-family: 'Open Sans', 'PingFang SC', sans-serif;
      }
 
      body {
@@ -36,11 +37,14 @@
        /* background: #143ACF; */
        /* background: #CBCED5; */
        /* background: #EAC4BF; */
-       font-family: 'Open Sans', 'PingFang SC', sans-serif;
+       font-family: var(--default-font-family);
      }
      h1 {
        font-weight: normal;
        text-transform: capitalize;
+     }
+     h1, h2, h3 {
+       margin-top: 1.5em;
      }
      /* header nav footer */
      header {
@@ -126,6 +130,7 @@
      main > * {
        margin-left: 15px;
        margin-right: 15px;
+       /* border-right: 1px solid black; */
      }
      p {
        font-size: 1.1em;
@@ -212,6 +217,7 @@
        /* margin-top: 0; */
        margin-bottom: 5px;
        display: inline-block;
+       font-family: var(--default-font-family);
      }
      .tags > span {
        /* background:#ECCB6B; */

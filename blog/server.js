@@ -23,7 +23,8 @@ app.get('/api/notes', (req, res) => {
 
 app.get('/api/tags', (req, res) => {
   dao.findAll('posts').then(docs => {
-    let tags = docs.map(e => e.tags).join(' ')
+    // new tags first, thus reverse
+    let tags = docs.map(e => e.tags).reverse().join(' ')
     res.send(tags)
   }).catch(err => res.status(500).send('err ' + err))
 })
