@@ -15,7 +15,7 @@
     <script>
      window.dataLayer = window.dataLayer || [];
      function gtag(){dataLayer.push(arguments);}
-     /* gtag('js', new Date());*/
+     gtag('js', new Date());
 
      /* gtag('config', 'UA-60584744-2');*/
     </script>
@@ -87,19 +87,25 @@
        font-weight: bold;
        color: #fff;
      }
-     nav > ul > li > a{
+     a {
        color: unset;
        text-decoration: none;
      }
-     nav > ul > li > a:hover {
+     nav a:active {
        text-decoration: underline;
+       /* background: rgba(255, 255, 255, 0.8); */
      }
-     nav > ul > li > a:active {
-       text-decoration: underline;
+     nav a {
+       padding: 0 5px;
+     }
+     nav a:hover, nav a#active  {
+       background: rgba(255, 255, 255, 0.4);
+       border-radius: 3px;
+     }
+     nav a#active {
+       background: rgba(255, 255, 255, 0.2);
      }
      nav > ul > li > a:visited {
-       color: unset;
-       text-decoration: none;
      }
      footer {
        /* padding-left: 2em; */
@@ -133,12 +139,10 @@
        color: #a4b9ce;
        padding-right: 0.5em;
      }
-     a {
+     main a {
        color: #0069d6;
-       text-decoration: none;
      }
-     a:hover {
-       /* background: #eee; */
+     main a:hover {
        box-shadow: 0 1px 5px 3px rgba(0, 0, 0, 0.10);
        border-radius: 3px;
      }
@@ -458,11 +462,11 @@
   <body>
     <nav>
       <ul>
-        <li><a href="/posts" onclick="route('/posts'); return false">POSTS</a></li>
-        <li><a href="/tags" onclick="route('/tags'); return false">TAGS</a></li>
-        <li><a href="/notes" onclick="route('/notes'); return false">TUTOR</a></li>
+        <li><a href="/posts">POSTS</a></li>
+        <li><a href="/tags">TAGS</a></li>
+        <li><a href="/notes">TUTOR</a></li>
         <!-- <li><a href="#">BLOGROLL</a></li> -->
-        <li><a href="/about" onclick="route('/about'); return false">ABOUT</a></li>
+        <li><a href="/about">ABOUT</a></li>
       </ul>
       </nav>
       <main>

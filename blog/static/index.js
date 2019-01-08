@@ -67,6 +67,10 @@ function genTagsHtml(tags){
   return '<div class="tags">' + tags.split(' ').reduce((sum, tag) => `${sum}<span id='${tag}'>${tag}</span>`,'') + '</div>'
 }
 
+function genUrlTitle(title) {
+  return title.replace(/[?.!]$/, '').replace(/[: ?]+/g, '-')
+}
+
 function genCreated(name) {
   return `20${name.substr(0,2)}-${name.substr(2,2)}-${name.substr(4,2)}`
 }
@@ -109,6 +113,29 @@ function loadingEffect() {
   main.innerHTML += '<div id="animation-container"><div class="lds-hourglass"></div></div>'
 }
 
+// bind nav clink event
+[...document.querySelectorAll('nav a'), ...document.querySelectorAll('header a')].forEach(e => {
+  e.onclick = () => {
+    // route(e.href)
+    console.log(e.getAttribute("href"))
+    route(e.getAttribute("href"))
+    // style
+    purgeActive()
+    e.id = 'active'
+    document.getElementById('top').style.display = 'none';
+    document.getElementById('foothold').style.display = 'none';
+
+    return false
+  }
+})
+
+function purgeActive() {
+  let active = document.getElementById('active')
+  if (active) {
+    active.id = ''
+  }
+}
+
 let lastPath
 
 function route(path) {
@@ -116,7 +143,17 @@ function route(path) {
   if(path) {
     if (path === window.location.pathname) return
     window.history.pushState(null, null, path)
-  } else path = window.location.pathname
+  } else {
+    path = window.location.pathname
+    let nav = document.querySelectorAll(`[href='${path}']`)[0]
+    // nav is undefined if visit a post page directly
+    if (nav) {
+      purgeActive()
+      nav.id = 'active'
+      document.getElementById('top').style.display = 'none';
+      document.getElementById('foothold').style.display = 'none';
+    }
+  }
 
   // just push/pop(forward/backword) within page no need to reset main content
   if (location.pathname === lastPath) return jump(location.hash.substr(1))
@@ -127,7 +164,7 @@ function route(path) {
   if (hit) {
     main.innerHTML = hit[0]
     document.title = hit[1]
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    // window.scrollTo({ top: 0, behavior: 'smooth' })
     gaCollect(path)
     return
   }
@@ -148,7 +185,7 @@ function route(path) {
         cache['/api/posts'][1] = 'Posts | nichijou'
 
         let contents = posts.reduce((sum, post) => {
-          let path = `/post/${post.title.replace(/ /g, '-')}-${parseInt(post.name.substr(0, 10)).toString(36)}`
+          let path = `/post/${genUrlTitle(post.title)}-${parseInt(post.name.substr(0, 10)).toString(36)}`
           return `${sum}<span>\n  (${genCreated(post.name)} '(<a href="${path}" style="font-size:1.5em" onclick="route('${path}'); return false">${post.title}</a>)
               :tags ${genTagsHtml(post.tags)})</span>`},'')
 
@@ -227,13 +264,14 @@ function route(path) {
     const url = '/api/post/' + parseInt(path.substr(path.lastIndexOf('-') + 1), 36)
     // const url = '/api/post/' + parseInt(path.match(/[\/-][a-z0-9]{6}/).substr(1), 36)
 
+    purgeActive()
     loadingEffect()
     ;(async () => {
       hit = cache[url]
       if (hit) {
         main.innerHTML = hit[0]
         document.title = hit[1]
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        // window.scrollTo({ top: 0, behavior: 'smooth' })
       } else {
         try {
           const res = await fetch(url)
@@ -248,7 +286,7 @@ function route(path) {
  <img alt="Creative Commons License" style="border-width:0;opacity:0.5" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a>
 Created: <a href="${post.html_url}" target="_blank">${genCreated(post.name)}</a> by Angus Zhang</div>
 ${post.content}<div id='eof'>✣</div>`
-          let newPath = `/post/${post.title.replace(/ /g, '-')}-${parseInt(post.name.substr(0, 10)).toString(36)}`
+          let newPath = `/post/${genUrlTitle(post.title)}-${parseInt(post.name.substr(0, 10)).toString(36)}`
           if (window.location.pathname !== newPath) {
             window.history.pushState(null, null, newPath)
           }
@@ -259,9 +297,11 @@ ${post.content}<div id='eof'>✣</div>`
         }
       }
       // why set timeout 0 -> schedule after DOM manipulation
-      setTimeout(() => {
-        jump(window.location.hash.substr(1))
-      }, 0)
+      if (window.location.hash) {
+        setTimeout(() => {
+          jump(window.location.hash.substr(1))
+        }, 0)
+      }
       bindSectionJump()
 
       gaCollect(path)

@@ -42,7 +42,9 @@ function genNew(name, collection) {
       entry.content = entry.content.replace(/<table>/g, '<div class="table-container"><table>').replace(/<\/table>/g, '<\/table><\/div>')
         .replace(/<p><img/g, '<p class="img-container"><img')
         .replace(/<img src="\.\./g, '<img src="https://raw.githubusercontent.com/whitemuu/blog/master')
-        .replace(/(\s)(=|~)(['"].*?|.*?['"])\2(\s)/g, `$1<code>$3</code>$4`)
+     // why '\s', -> width="800" height="400"
+     // .replace(/(\s)(=|~)(['"].*?|.*?['"])\2(\s)/g, `$1<code>$3</code>$4`)
+        .replace(/(=|~)((&#34;|&#39;).*?|.*?(&#34;|&#39;))\1(\s)/g, `<code>$2</code>$5`)
         .replace(/<code class="language-(.+)">([\s\S]*?)<\/code>/g, (match, p1, p2) => {
           try {
             p2 = p2
