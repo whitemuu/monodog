@@ -13,7 +13,7 @@ my %site_info = (<span style="font-size:1.2em;color:#555;">
               front_end => [qw| HTML CSS Javascript        |],
                back_end => [qw| Nodejs Express MongoDB     |],
                  credit => [qw| Org-js Prismjs GoogleFonts |],
-                   desc => '<a href='/post/TYZOX7'>link</a>',
+                   desc => '<a href='/post/41MD'>link</a>',
              repository => '<a href='https://github.com/whitemuu/nodeblog' target='_blank'>whitemuu/nodeblog</a>'</span>
                 );</pre>`, 'About | nichijou']
 }
@@ -136,11 +136,19 @@ function loadingEffect() {
   main.innerHTML += '<div id="animation-container"><div class="lds-hourglass"></div></div>'
 }
 
+// bind in site link within main
+function bindLinkInMain() {
+  document.querySelectorAll('main a[href^="/"]').forEach(e => e.onclick = () => {
+    route(e.getAttribute("href"))
+    purgeActive()
+    return false
+  })
+}
+
 // bind nav clink event
 [...document.querySelectorAll('nav a'), ...document.querySelectorAll('header a')].forEach(e => {
   e.onclick = () => {
-    // route(e.href)
-    // console.log(e.getAttribute("href"))
+    // route(e.href) <- full path
     route(e.getAttribute("href"))
     // style
     purgeActive()
@@ -182,12 +190,15 @@ function route(path) {
   if (location.pathname === lastPath) return jump(location.hash.substr(1))
   lastPath = path
 
+  console.log(path);
   let hit = cache['/api' + path]
+  console.log(hit);
 
   if (hit) {
     main.innerHTML = hit[0]
     document.title = hit[1]
     // window.scrollTo({ top: 0, behavior: 'smooth' })
+    bindLinkInMain()
     gaCollect(path)
     return
   }
@@ -208,8 +219,8 @@ function route(path) {
         cache['/api/posts'][1] = 'Posts | nichijou'
 
         let contents = posts.reduce((sum, post) => {
-          let path = `/post/${encodeDate(post.name.substr(0, 8))}:${genUrlTitle(post.title)}`
-          return `${sum}<span>\n  (${genCreated(post.name)} '(<a href="${path}" style="font-size:1.5em" onclick="route('${path}'); return false">${post.title}</a>)
+          let path = `/post/${encodeDate(post.name.substr(0, 8))}/${genUrlTitle(post.title)}`
+          return `${sum}<span>\n  (${genCreated(post.name)} '(<a href="${path}" style="font-size:1.5em">${post.title}</a>)
               :tags ${genTagsHtml(post.tags)})</span>`},'')
 
         contents = `<pre class="infopre">(posts${contents || '\n  nil'})</pre>`
@@ -218,6 +229,7 @@ function route(path) {
         cache['/api/posts'][0] = contents
         // window.scrollTo({ top: 0, behavior: 'smooth' })
         gaCollect(path)
+        bindLinkInMain()
       } catch (e) {
         console.log(e)
       }
@@ -288,7 +300,6 @@ function route(path) {
     const url = '/api/post/' + decodeDate(path.substr(6, 4))
     // const url = '/api/post/' + parseInt(path.match(/[\/-][a-z0-9]{6}/).substr(1), 36)
 
-    purgeActive()
     loadingEffect()
     ;(async () => {
       hit = cache[url]
