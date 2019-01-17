@@ -37,6 +37,7 @@ function genNew(name, collection) {
 
       entry = (({name, sha, html_url}) => ({name, sha, html_url}))(entry)
       entry.tags = orgDocument.directiveValues['tags:']
+      entry.update = orgDocument.directiveValues['date:']
       entry.title = orgDocument.title
       entry.content = orgHTMLDocument.contentHTML
       entry.content = entry.content.replace(/<table>/g, '<div class="table-container"><table>').replace(/<\/table>/g, '<\/table><\/div>')

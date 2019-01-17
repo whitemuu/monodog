@@ -97,6 +97,13 @@ function genCreated(name) {
   return `20${name.substr(0,2)}-${name.substr(2,2)}-${name.substr(4,2)}`
 }
 
+function genDateInfo(post) {
+  let update = post.update.substr(0, 10)
+  let create = genCreated(post.name)
+  if (create === update) return `Created: <a href="${post.html_url}" target="_blank">${create}</a>`
+  return `Created: ${create} & Updated: <a href="${post.html_url}" target="_blank">${update}</a>`
+}
+
 function gaCollect(pagePath) {
   // https://stackoverflow.com/questions/54058464/what-does-gtagjs-new-date-do-in-snippet-proviced-by-gtag-js
   // gtag('js', new Date());
@@ -319,7 +326,7 @@ function route(path) {
           let content = `<h1>${post.title}</h1>${genTagsHtml(post.tags)}
 <div id="meta"><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
  <img alt="Creative Commons License" style="border-width:0;opacity:0.5" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a>
-Created: <a href="${post.html_url}" target="_blank">${genCreated(post.name)}</a> by Angus Zhang</div>
+${genDateInfo(post)} by Angus Zhang</div>
 ${post.content}<div id='eof'>✣</div>`
           let newPath = `/post/${encodeDate(post.name.substr(0, 8))}/${genUrlTitle(post.title)}`
           if (window.location.pathname !== newPath) {
