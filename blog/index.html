@@ -16,8 +16,6 @@
      window.dataLayer = window.dataLayer || [];
      function gtag(){dataLayer.push(arguments);}
      gtag('js', new Date());
-
-     /* gtag('config', 'UA-60584744-2');*/
     </script>
     <style>
      :root {
@@ -161,17 +159,34 @@
        color: #555;
        line-height: 1.8;
      }
+     dt {
+       color: unset;
+       font-weight: bold;
+     }
+     dt:after {
+       content: ' :';
+       color: #aaa;
+     }
+     dd {
+       margin-inline-start: 1em;
+       font-size: 0.9em;
+       color: #555;
+     }
      .table-container {
        margin: unset;
        overflow-x: auto;
      }
-     main > pre {
+     main > pre, main > blockquote {
        margin: unset;
        line-height: unset;
        background: rgba(240,240,235,.4);
        overflow: auto;
        padding: 10px 15px;
      }
+     main > blockquote {
+       overflow: visible;
+     }
+     /* ?????? */
      pre.infopre {
        background: unset;
        color: #aaa;
@@ -234,19 +249,23 @@
      blockquote {
        color: #888;
        /* font-style: italic; */
-       font-family: cursive;
+       font-family: serif;
        font-size: 1.1em;
      }
      blockquote > p{
        display: inline;
+       line-height: 1.5;
      }
      blockquote:before {
        color: #ccc;
        content: open-quote;
        font-size: 4em;
        line-height: 0.1em;
-       margin-right: 0.25em;
-       vertical-align: -0.4em;
+       margin-right: 0.1em;
+       margin-left: 0;
+       vertical-align: -0.3em;
+       position: relative;
+       top: -8px;
      }
      #eof {
        font-size: 2em;
@@ -303,7 +322,7 @@
        main > h2, main > h3, main > h4 {
          margin-left: unset;
        }
-       main > pre {
+       main > pre, main > blockquote {
          padding-left: var(--main-margin-medium);
        }
        .section-number {
@@ -331,6 +350,10 @@
        .table-container {
          margin-left: var(--main-margin-normal);
          overflow-x: visible;
+       }
+       main > blockquote {
+         padding-left: var(--main-margin-normal);
+         padding-right: 10px;
        }
        main > pre {
          max-width: calc(100% - 120px);
@@ -473,7 +496,7 @@
       <ul>
         <li><a href="/posts">POSTS</a></li>
         <li><a href="/tags">TAGS</a></li>
-        <li><a href="/notes">TUTOR</a></li>
+        <li><a href="/notes">NOTES</a></li>
         <!-- <li><a href="#">BLOGROLL</a></li> -->
         <li><a href="/about">ABOUT</a></li>
       </ul>

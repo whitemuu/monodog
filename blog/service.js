@@ -3,7 +3,7 @@ const org = require("org")
 const fetch = require('node-fetch')
 const Prism = require('prismjs')
 var loadLanguages = require('prismjs/components/');
-loadLanguages(['lisp', 'haskell', 'java', 'lua']);
+loadLanguages(['lisp', 'haskell', 'java', 'lua', 'perl', 'css']);
 
 const parser = new org.Parser();
 

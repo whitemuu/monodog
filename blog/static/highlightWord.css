@@ -1,0 +1,29 @@
+/* source ? */
+
+.highlight-word {
+  display: inline-block;
+  position: relative;
+  z-index: 0
+}
+
+.highlight-word:before {
+  content: '';
+  background: url(https://cdn2.hubspot.net/hubfs/1951809/text-highlight.png?t=1542708765973) no-repeat center center;
+  background-size: 100% auto;
+  width: 108%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  z-index: -1;
+  transform: translate(-3%, 0)
+}
+
+.highlight-word-small:before {
+  background-image: url('https://cdn2.hubspot.net/hubfs/1951809/text-highlight-small.png?t=1542708765973');
+  height: 37px
+}
+
+.highlight-word:before,
+.highlight-word-small:before {
+  height: 27px
+}
