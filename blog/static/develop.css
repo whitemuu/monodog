@@ -176,7 +176,7 @@ pre.infopre {
 code {
   font-family: 'menlo', monospace;
 }
-main > pre,
+main > pre, /*for bad not so bad*/
 main > pre > code {
   font-family: 'menlo', monospace;
   font-size: 0.9em;
@@ -238,7 +238,8 @@ blockquote > p{
 }
 blockquote:before {
   color: #ccc;
-  content: open-quote;
+  /* content: open-quote; */
+  content: '“';
   font-size: 4em;
   line-height: 0.1em;
   margin-right: 0.1em;
@@ -268,16 +269,17 @@ div#animation-container {
     margin-top: 20px;
     margin-bottom: 5px;
   }
-  header img{
+  header svg{
     margin: auto;
     display: block;
   }
-  .img-container {
+  p.img-container {
     margin: 0;
     /* display: flex; */
     /* flex will stretch img */
   }
-  .img-container > img {
+  p > img,
+  p.img-container > img {
     max-width: 100%;
     margin: auto;
     display: block;
@@ -329,7 +331,12 @@ div#animation-container {
   }
   .table-container {
     margin-left: var(--main-margin-normal);
-    overflow-x: visible;
+    max-width: calc(100% - 120px);
+    /* overflow-x: visible; */
+  }
+  table {
+    min-width: 648px;
+    margin: unset;
   }
   main > blockquote {
     padding-left: var(--main-margin-normal);
@@ -342,9 +349,6 @@ div#animation-container {
     width: fit-content;
     padding-left: var(--main-margin-normal);
     padding-right: 10px;
-  }
-  table {
-    min-width: 648px;
   }
   /* head nav footer */
   nav, header, footer {

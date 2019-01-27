@@ -3,7 +3,8 @@ const org = require("org")
 const fetch = require('node-fetch')
 const Prism = require('prismjs')
 var loadLanguages = require('prismjs/components/');
-loadLanguages(['lisp', 'haskell', 'java', 'lua', 'perl', 'css']);
+// default languages: markup(markup, html, xml, svg, mathml), css, clike and javascript
+loadLanguages(['lisp', 'haskell', 'java', 'lua', 'perl', 'bash']);
 
 const parser = new org.Parser();
 
@@ -45,7 +46,7 @@ function genNew(name, collection) {
         .replace(/<img src="\.\./g, '<img src="https://raw.githubusercontent.com/whitemuu/blog/master')
      // why '\s', -> width="800" height="400"
      // .replace(/(\s)(=|~)(['"].*?|.*?['"])\2(\s)/g, `$1<code>$3</code>$4`)
-        .replace(/(=|~)((&#34;|&#39;).*?|.*?(&#34;|&#39;))\1(\s)/g, `<code>$2</code>$5`)
+        .replace(/(=|~)((&#34;|&#39;|&#44;).*?|.*?(&#34;|&#39;&#44;))\1(\s)/g, `<code>$2</code>$5`)
         .replace(/<code class="language-(.+)">([\s\S]*?)<\/code>/g, (match, p1, p2) => {
           try {
             p2 = p2
