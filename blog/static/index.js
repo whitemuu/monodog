@@ -108,7 +108,7 @@ function gaCollect(pagePath) {
   // https://stackoverflow.com/questions/54058464/what-does-gtagjs-new-date-do-in-snippet-proviced-by-gtag-js
   // gtag('js', new Date());
   // console.log(pagePath)
-  gtag('config', 'UA-60584744-2', {'page_path': pagePath});
+  gtag('config', 'UA-60584744-4', {'page_path': pagePath});
 }
 
 const bindSectionJump = () =>
