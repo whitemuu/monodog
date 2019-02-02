@@ -6,7 +6,9 @@ const express = require('express')
 const fetch = require('node-fetch')
 const app = express()
 
+// app.use(require('prerender-node'))
 app.use(express.json())
+// css, js, images
 app.use(express.static(__dirname + '/static'))
 
 app.get('/api/posts', (req, res) => {
@@ -123,6 +125,10 @@ app.post('/api/reelin', (req, res) => {
   } else {
     res.send('nothing to be done')
   }
+})
+
+app.get('/robots.txt', (req, res) => {
+  res.sendFile(__dirname + '/robots.txt')
 })
 
 app.get('/*', (req, res) => {

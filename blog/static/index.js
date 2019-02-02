@@ -14,7 +14,7 @@ my %site_info = (<span style="font-size:1.2em;color:#555;">
                back_end => [qw| Nodejs Express MongoDB     |],
                  credit => [qw| Org-js Prismjs GoogleFonts |],
                    desc => '<a href='/post/41MD'>link</a>',
-             repository => '<a href='https://github.com/whitemuu/nodeblog' target='_blank'>whitemuu/nodeblog</a>'</span>
+             repository => '<a href='https://github.com/whitemuu/monodog' target='_blank'>whitemuu/monodog</a>'</span>
                 );</pre>`, 'About | nichijou']
 }
 // age ${new Date().getFullYear() - 1991}
@@ -211,7 +211,9 @@ function route(path) {
   }
 
   /* jshint ignore:start */
-  if (path === '/' || path === '/posts') {
+  if (path === '/') {
+    route('/posts')
+  } else if (path === '/posts') {
 
     loadingEffect()
     // setTimeout(() => {

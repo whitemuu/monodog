@@ -1,5 +1,4 @@
 :root {
-  /* --main-margin-small: 15px; */
   --main-margin-medium: 40px;
   --main-margin-normal: 80px;
   --main-orange: #ECCB6B;
@@ -8,8 +7,8 @@
 
 body {
   margin: 0;
-  /* background: #f2f2f2; */
   background: var(--main-orange);
+  /* background: #f2f2f2; */
   /* background: #34495e; */
   /* background: #fefefe; */
   /* background: #143ACF; */
@@ -25,9 +24,6 @@ h1, h2, h3 {
   margin-top: 1.5em;
 }
 /* header nav footer */
-header {
-  /* display: none; */
-}
 
 #meta {
   font-style: italic;
@@ -112,8 +108,9 @@ main > * {
 }
 p {
   /* font-size: 1.1em; */
-  line-height: 2;
-  margin-top: 1em;
+  line-height: 1.7;
+  /* margin-top: 1em; */
+  margin-bottom: 0.2em;
 }
 .section-number {
   box-sizing: border-box;
@@ -132,6 +129,7 @@ main a:hover {
 ol, ul {
   box-sizing: border-box;
   /* margin-left: 40px; */
+  margin-top: 0;
 }
 li, th, td {
   /* line-height: 0.95em; */
@@ -222,9 +220,10 @@ th, td {
   background: #eccb6b;
   color:#fff;
   padding: 0px 5px 2px;
-  margin: 2px;
+  margin: 2px 4px 2px 0;
   border-radius: 4px;
   display: inline-block;
+  cursor: not-allowed;
 }
 blockquote {
   color: #888;
@@ -233,8 +232,9 @@ blockquote {
   font-size: 1.1em;
 }
 blockquote > p{
-  display: inline;
-  line-height: 1.5;
+  /* display: inline; */
+  line-height: 1.2;
+  margin: 1px;
 }
 blockquote:before {
   color: #ccc;
@@ -244,9 +244,10 @@ blockquote:before {
   line-height: 0.1em;
   margin-right: 0.1em;
   margin-left: 0;
-  vertical-align: -0.3em;
+  /* vertical-align: -0.3em; */
+  float: left;
   position: relative;
-  top: -8px;
+  top: 0.1em;
 }
 #eof {
   font-size: 2em;
@@ -424,6 +425,7 @@ div#animation-container {
     to {right: -40px;}
   }
 }
+
 /* order matters */
 @media only screen and (min-width: 1600px) {
   main {
@@ -441,6 +443,8 @@ div#animation-container {
   }
 }
 
+/* --------------- components ------------ */
+
 /*animation*/
 .lds-hourglass {
   display: inline-block;
@@ -449,6 +453,7 @@ div#animation-container {
   height: 64px;
 }
 .lds-hourglass:after {
+  cursor: wait;
   content: " ";
   display: block;
   border-radius: 50%;
