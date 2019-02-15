@@ -126,7 +126,7 @@ main a:hover {
   box-shadow: 0 1px 5px 3px rgba(0, 0, 0, 0.10);
   border-radius: 3px;
 }
-ol, ul {
+ol, ul, dl {
   box-sizing: border-box;
   /* margin-left: 40px; */
   margin-top: 0;
@@ -342,10 +342,11 @@ div#animation-container {
   main > blockquote {
     padding-left: var(--main-margin-normal);
     padding-right: 10px;
+    max-width: 638px;
   }
   main > pre {
     max-width: calc(100% - 120px);
-    min-width: 648px;
+    min-width: 638px;
     margin-left: unset;
     width: fit-content;
     padding-left: var(--main-margin-normal);

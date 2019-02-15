@@ -116,6 +116,7 @@ const bindSectionJump = () =>
         sectionNumberElement.onclick = () => {
           // document.getElementById('header-' + sectionNumberElement.innerText.replace(/\./g,"-")).scrollIntoView({behavior: 'smooth', block: 'start'})
           let anchor = 'header-' + sectionNumberElement.innerText.replace(/\./g,"-")
+          if (location.hash.substr(1) === anchor) return // avoid multi clicks
           jump(anchor)
           window.history.pushState(null, null, '#' + anchor) // direct set location.hash have effect
         }
@@ -145,8 +146,10 @@ function loadingEffect() {
 
 // bind in site link within main
 function bindLinkInMain() {
-  document.querySelectorAll('main a[href^="/"]').forEach(e => e.onclick = () => {
-    route(e.getAttribute("href"))
+  document.querySelectorAll('main a[href^="/"], main a[href^="."]').forEach(e => e.onclick = () => {
+    const href = e.getAttribute("href")
+    if (href.startsWith('.')) href.replace('.', '/post')
+    route(href)
     purgeActive()
     return false
   })
@@ -197,9 +200,9 @@ function route(path) {
   if (location.pathname === lastPath) return jump(location.hash.substr(1))
   lastPath = path
 
-  console.log(path);
+  // console.log(path);
   let hit = cache['/api' + path]
-  console.log(hit);
+  // console.log(hit);
 
   if (hit) {
     main.innerHTML = hit[0]
@@ -309,7 +312,6 @@ function route(path) {
     const url = '/api/post/' + decodeDate(path.substr(6, 4))
     // const url = '/api/post/' + parseInt(path.match(/[\/-][a-z0-9]{6}/).substr(1), 36)
 
-    loadingEffect()
     ;(async () => {
       hit = cache[url]
       if (hit) {
@@ -318,6 +320,7 @@ function route(path) {
         // window.scrollTo({ top: 0, behavior: 'smooth' })
       } else {
         try {
+          loadingEffect()
           const res = await fetch(url)
           if (res.status !== 200) return f404()
           const post = await res.json()
@@ -330,10 +333,13 @@ function route(path) {
 <img alt="Creative Commons License" style="border-width:0;opacity:0.5" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAIAAAD8q9/YAAAABGdBTUEAANbY1E9YMgAAAZ9JREFUSMflljFrwkAUx98H6J3N6KbXFjtJJZNIB+Ntds0kdIxDp3boTYJ0UDcLutxXOCfbpejQSRE5+g38CvcVrtCTNJVLiFAKaR4ZwvH+yf3yf+/lAHIYOjfxDTybi+jVvesCwGg0ssoopRjjKZ+Y5O3HtnBayISvduApn2CM42hD5splxeQv3hf9fj/DwI3rRrlcTq4NKSUAdG47RrKRm/ZNO6vACCNjr5SSEAIAlFKlFKUUAAghUkpjcs2thVU9fh5b58Lhy37eWxejKmtynOSwV9MA9556ALBcLrXWhBDf97XW7Cscx1FKcc6FEGYRYRRW9Wq9sj794CZhN3GZvyWxAz883gOAlFIpFZ1bvu+7rhutasYYxtioXt9e1tt1gsNWT+J2HPdp0kuOALY6TCkNgsA4zBjjnO8dRkc4nOCVtYzTOHyUJL6H0b6HhRCO4wBAEARhD7uuu9vttNatVqt6VU3Zw+mB/7qHZ3NRb9RLpVKOpvSUTxA6GQ6HCcCe551fnP2T/3A4ugaDgZW26TWLxWK2T1r5OkvnKj4Bfm7H+J/sGfMAAAAASUVORK5CYII=" /></a>
 ${genDateInfo(post)} by Angus Zhang</div>
 ${post.content}<div id='eof'>✣</div>`
+
+          // revise path TODO extract out of if clause
           let newPath = `/post/${encodeDate(post.name.substr(0, 8))}/${genUrlTitle(post.title)}`
           if (window.location.pathname !== newPath) {
             window.history.replaceState(null, null, newPath)
           }
+
           main.innerHTML = content
           cache[url][0] = content
         } catch (e) {
