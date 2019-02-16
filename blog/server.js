@@ -92,32 +92,35 @@ app.get('/api/sync',  (req, res) => {
 
 // webhook
 app.post('/api/reelin', (req, res) => {
-  const commit = req.body.head_commit
+  // const commit = req.body.head_commit
+  const commits = req.body.commits
   let message = ""
-  if (commit.added.length !== 0) {
-    commit.added.forEach(name => {
-      if (name.startsWith('posts/') || name.startsWith('notes/')) {
-        service.addEntry(name.substr(6), name.substr(0, 5))
-        message += `${name} added\n`
-      }
-    })
-  }
-  if (commit.modified.length !== 0) {
-    commit.modified.forEach(name => {
-      if (name.startsWith('posts/') || name.startsWith('notes/')) {
-        service.updateEntry(name.substr(6), name.substr(0, 5))
-        message += `${name} updated\n`
-      }
-    })
-  }
+  for (let commit of commits) {
+    if (commit.added.length !== 0) {
+      commit.added.forEach(name => {
+        if (name.startsWith('posts/') || name.startsWith('notes/')) {
+          service.addEntry(name.substr(6), name.substr(0, 5))
+          message += `${name} added\n`
+        }
+      })
+    }
+    if (commit.modified.length !== 0) {
+      commit.modified.forEach(name => {
+        if (name.startsWith('posts/') || name.startsWith('notes/')) {
+          service.updateEntry(name.substr(6), name.substr(0, 5))
+          message += `${name} updated\n`
+        }
+      })
+    }
 
-  if (commit.removed.length !== 0) {
-    commit.removed.forEach(name => {
-      if (name.startsWith('posts/') || name.startsWith('notes/')) {
-        dao.deleteOne(name.substr(6), name.substr(0, 5))
-        message += `${name} removed\n`
-      }
-    })
+    if (commit.removed.length !== 0) {
+      commit.removed.forEach(name => {
+        if (name.startsWith('posts/') || name.startsWith('notes/')) {
+          dao.deleteOne(name.substr(6), name.substr(0, 5))
+          message += `${name} removed\n`
+        }
+      })
+    }
   }
 
   if (message) {
