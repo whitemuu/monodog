@@ -3,7 +3,8 @@
   --main-margin-normal: 80px;
   --main-orange: #ECCB6B;
   /* --default-font-family: 'Open Sans', 'PingFang SC', sans-serif; */
-  --default-font-family: "Roboto", "Helvetica", "sans-serif";
+  /* --default-font-family: "Roboto", "Helvetica", "sans-serif"; */
+  --default-font-family: "PingFang SC", "Roboto", "Helvetica", "sans-serif";
 }
 
 body {
@@ -63,7 +64,7 @@ nav > ul > li {
   display: inline-block;
   font-size: 1.2em;
   list-style: none;
-  font-weight: bold;
+  /* font-weight: bold; */
   color: #fff;
 }
 a {
@@ -111,7 +112,6 @@ p {
   /* font-size: 1.1em; */
   line-height: 1.7;
   /* margin-top: 1em; */
-  margin-bottom: 0.2em;
 }
 .section-number {
   box-sizing: border-box;
@@ -127,6 +127,11 @@ main a:hover {
   box-shadow: 0 1px 5px 3px rgba(0, 0, 0, 0.10);
   border-radius: 3px;
 }
+ol, ul {
+  /* padding-left: 0; */
+  /* list-style-position: inside; */
+  padding-left: 1.2em;
+}
 ol, ul, dl {
   box-sizing: border-box;
   /* margin-left: 40px; */
@@ -135,21 +140,22 @@ ol, ul, dl {
 li, th, td {
   /* line-height: 0.95em; */
   font-size: 0.9em;
-  color: #555;
+  /* color: #555; */
   line-height: 1.8;
 }
 dt {
-  color: unset;
-  font-weight: bold;
+  /* color: unset; */
+  /* font-weight: bold; */
 }
 dt:after {
-  content: ' :';
-  color: #aaa;
+  content: ' ::';
+  font-weight: bold;
+  /* color: #aaa; */
 }
 dd {
-  margin-inline-start: 1em;
+  margin-inline-start: 0;
   font-size: 0.9em;
-  color: #555;
+  color: #aaa;
 }
 .table-container {
   margin: unset;
@@ -161,6 +167,7 @@ main > pre, main > blockquote {
   background: rgba(240,240,235,.4);
   overflow: auto;
   padding: 10px 15px;
+  border: 1px solid #eee;
 }
 main > blockquote {
   overflow: visible;
@@ -170,6 +177,7 @@ pre.infopre {
   background: unset;
   color: #aaa;
   margin-top: 80px;
+  border: none;
 }
 /* main > pre > code.language-unknown { */
 code {
@@ -339,6 +347,9 @@ div#animation-container {
   table {
     min-width: 648px;
     margin: unset;
+  }
+  main > pre, main > blackquote {
+    border-left: none;
   }
   main > blockquote {
     padding-left: var(--main-margin-normal);
