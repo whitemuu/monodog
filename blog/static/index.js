@@ -69,7 +69,7 @@ function slappingZero(num, length) {
 function encodeDate(str) {
   const [year, month, day, hour] = str.match(/\d{2}/g)
   const date = new Date('20' + year, month - 1, day, hour)
-  let startOfDate = new Date(date.getFullYear(), 0, 0)
+  let startOfDate = new Date(date.getFullYear(), 0)
   let dayOfYear = Math.floor((date - startOfDate)/ (1000 * 60 * 60 * 24))
   return parseInt(year + slappingZero((dayOfYear * 24 + date.getHours()).toString(), 4)).toString(36).toUpperCase()
 }
@@ -78,7 +78,7 @@ function decodeDate(str) {
   let date = parseInt(str, 36).toString()
   let [, year, hours] = date.match(/(\d{2})(\d{4})/)
   let days = Math.floor(hours / 24)
-  date = new Date((days * 24 * 60 * 60 * 1000) + (new Date('20' + year, 0, 0) - 0))
+  date = new Date((days * 24 * 60 * 60 * 1000) + (new Date('20' + year, 0) - 0))
   return year+ slappingZero(date.getMonth() + 1, 2) + slappingZero(date.getDate(), 2) + slappingZero((hours % 24), 2)
 }
 
@@ -94,7 +94,8 @@ function genUrlTitle(title) {
 }
 
 function genCreated(name) {
-  return `20${name.substr(0,2)}-${name.substr(2,2)}-${name.substr(4,2)}`
+  let date = decodeDate(name.substr(0,4))
+  return `20${date.substr(0,2)}-${date.substr(2,2)}-${date.substr(4,2)}`
 }
 
 function genDateInfo(post) {
@@ -231,7 +232,7 @@ function route(path) {
         cache['/api/posts'][1] = 'Posts | nichijou'
 
         let contents = posts.reduce((sum, post) => {
-          let path = `/post/${encodeDate(post.name.substr(0, 8))}/${genUrlTitle(post.title)}`
+          let path = `/post/${post.name.substr(0, 4)}/${genUrlTitle(post.title)}`
           return `${sum}<span>\n  (${genCreated(post.name)} '(<a href="${path}" style="font-size:1.5em">${post.title}</a>)
               :tags ${genTagsHtml(post.tags)})</span>`},'')
 
@@ -309,7 +310,7 @@ function route(path) {
 
   } else if(path.startsWith('/post/')) {
 
-    const url = '/api/post/' + decodeDate(path.substr(6, 4))
+    const url = '/api' + path.substr(0, 10)
     // const url = '/api/post/' + parseInt(path.match(/[\/-][a-z0-9]{6}/).substr(1), 36)
 
     ;(async () => {
@@ -335,7 +336,7 @@ ${genDateInfo(post)} by Angus Zhang</div>
 ${post.content}<div id='eof'>✣</div>`
 
           // revise path TODO extract out of if clause
-          let newPath = `/post/${encodeDate(post.name.substr(0, 8))}/${genUrlTitle(post.title)}`
+          let newPath = `/post/${post.name.substr(0, 4)}/${genUrlTitle(post.title)}`
           if (window.location.pathname !== newPath) {
             window.history.replaceState(null, null, newPath)
           }
