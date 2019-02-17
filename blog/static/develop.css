@@ -2,7 +2,8 @@
   --main-margin-medium: 40px;
   --main-margin-normal: 80px;
   --main-orange: #ECCB6B;
-  --default-font-family: 'Open Sans', 'PingFang SC', sans-serif;
+  /* --default-font-family: 'Open Sans', 'PingFang SC', sans-serif; */
+  --default-font-family: "Roboto", "Helvetica", "sans-serif";
 }
 
 body {
