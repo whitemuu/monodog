@@ -10,9 +10,9 @@ const cache = {
              };
 
 my %site_info = (<span style="font-size:1.2em;color:#555;">
-              front_end => [qw| HTML CSS Javascript        |],
-               back_end => [qw| Nodejs Express MongoDB     |],
-                 credit => [qw| Org-js Prismjs GoogleFonts |],
+              front_end => [qw| HTML CSS Javascript    |],
+               back_end => [qw| Nodejs Express MongoDB |],
+                 credit => [qw| Org-js Prismjs         |],
                    desc => '<a href='/post/41MD'>link</a>',
              repository => '<a href='https://github.com/whitemuu/monodog' target='_blank'>whitemuu/monodog</a>'</span>
                 );</pre>`, 'About | nichijou']
@@ -41,8 +41,10 @@ const karasuFoothold = document.getElementById('foothold')
 function fly() {
   karasu.style.transform = "rotate(64deg)"
   window.scrollTo({ top: 0, behavior: 'smooth' })
-  window.history.pushState(null, null, ' ')
-  document.title = document.title.substr(0, document.title.indexOf('::'))
+  if (location.hash) {
+    window.history.pushState(null, null, ' ')
+    document.title = document.title.substr(0, document.title.indexOf('::'))
+  }
   karasuFoothold.style.animationName='drop'
   setTimeout(() => {
     karasuFoothold.style.display = "none"
@@ -151,6 +153,7 @@ function bindLinkInMain() {
     const href = e.getAttribute("href")
     if (href.startsWith('.')) href.replace('.', '/post')
     route(href)
+    window.scrollTo({top: 0, behavior: 'auto'})
     purgeActive()
     return false
   })
@@ -161,6 +164,7 @@ function bindLinkInMain() {
   e.onclick = () => {
     // route(e.href) <- full path
     route(e.getAttribute("href"))
+    window.scrollTo({top: 0, behavior: 'auto'})
     // style
     purgeActive()
     e.id = 'active'
@@ -234,9 +238,10 @@ function route(path) {
         let contents = posts.reduce((sum, post) => {
           let path = `/post/${post.name.substr(0, 4)}/${genUrlTitle(post.title)}`
           return `${sum}<span>\n  (${genCreated(post.name)} '(<a href="${path}" style="font-size:1.5em">${post.title}</a>)
-              :tags ${genTagsHtml(post.tags)})</span>`},'')
+                ${genTagsHtml(post.tags)})</span>`},'')
+          // :tags ${genTagsHtml(post.tags)})</span>`},'')
 
-        contents = `<pre class="infopre">(posts${contents || '\n  nil'})</pre>`
+        contents = `<pre class="infopre">(posts${contents || '\n  nil'})</pre><div id='eof'>✣</div>`
 
         main.innerHTML = contents
         cache['/api/posts'][0] = contents
