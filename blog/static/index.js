@@ -13,7 +13,7 @@ my %site_info = (<span style="font-size:1.2em;color:#555;">
               front_end => [qw| HTML CSS Javascript    |],
                back_end => [qw| Nodejs Express MongoDB |],
                  credit => [qw| Org-js Prismjs         |],
-                   desc => '<a href='/post/41MD'>link</a>',
+                   desc => '<a href='/posts/41LP'>link</a>',
              repository => '<a href='https://github.com/whitemuu/monodog' target='_blank'>whitemuu/monodog</a>'</span>
                 );</pre>`, 'About | nichijou']
 }
@@ -150,8 +150,11 @@ function loadingEffect() {
 // bind in site link within main
 function bindLinkInMain() {
   document.querySelectorAll('main a[href^="/"], main a[href^="."]').forEach(e => e.onclick = () => {
-    const href = e.getAttribute("href")
-    if (href.startsWith('.')) href.replace('.', '/post')
+    let href = e.getAttribute("href")
+    // console.log(href)
+    if (href.startsWith('..')) href = href.replace('..', '')
+    if (href.startsWith('.')) href= href.replace('.', '/posts')
+    // console.log(href)
     route(href)
     window.scrollTo({top: 0, behavior: 'auto'})
     purgeActive()
@@ -221,7 +224,7 @@ function route(path) {
   /* jshint ignore:start */
   if (path === '/') {
     route('/posts')
-  } else if (path === '/posts') {
+  } else if (path === '/posts' || path === '/posts/') {
 
     loadingEffect()
     // setTimeout(() => {
@@ -236,7 +239,7 @@ function route(path) {
         cache['/api/posts'][1] = 'Posts | nichijou'
 
         let contents = posts.reduce((sum, post) => {
-          let path = `/post/${post.name.substr(0, 4)}/${genUrlTitle(post.title)}`
+          let path = `/posts/${post.name.substr(0, 4)}/${genUrlTitle(post.title)}`
           return `${sum}<span>\n  (${genCreated(post.name)} '(<a href="${path}" style="font-size:1.5em">${post.title}</a>)
                 ${genTagsHtml(post.tags)})</span>`},'')
           // :tags ${genTagsHtml(post.tags)})</span>`},'')
@@ -313,9 +316,9 @@ function route(path) {
       }
     })()
 
-  } else if(path.startsWith('/post/')) {
+  } else if(path.startsWith('/posts/')) {
 
-    const url = '/api' + path.substr(0, 10)
+    const url = '/api' + path.substr(0, 11) // /posts/ZZZZfeifjs
     // const url = '/api/post/' + parseInt(path.match(/[\/-][a-z0-9]{6}/).substr(1), 36)
 
     ;(async () => {
@@ -340,18 +343,21 @@ function route(path) {
 ${genDateInfo(post)} by Angus Zhang</div>
 ${post.content}<div id='eof'>✣</div>`
 
-          // revise path TODO extract out of if clause
-          let newPath = `/post/${post.name.substr(0, 4)}/${genUrlTitle(post.title)}`
-          if (window.location.pathname !== newPath) {
-            window.history.replaceState(null, null, newPath)
-          }
-
           main.innerHTML = content
           cache[url][0] = content
         } catch (e) {
           console.log(e)
         }
       }
+
+      // revise path
+      let title = cache[url][1]
+      // let newPath = `/posts/${post.name.substr(0, 4)}/${genUrlTitle(post.title)}`
+      let newPath = `/posts/${path.substr(7, 4)}/${genUrlTitle(title)}`
+      if (window.location.pathname !== newPath) {
+        window.history.replaceState(null, null, newPath)
+      }
+
       // why set timeout 0 -> schedule after DOM manipulation
       if (window.location.hash) {
         setTimeout(() => {
@@ -359,6 +365,7 @@ ${post.content}<div id='eof'>✣</div>`
         }, 0)
       }
       bindSectionJump()
+      bindLinkInMain()
 
       gaCollect(path.substr(0, 10))
     })()

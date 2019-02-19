@@ -31,7 +31,7 @@ app.get('/api/tags', (req, res) => {
   }).catch(err => res.status(500).send('err ' + err))
 })
 
-app.get('/api/post/:id',  (req, res) => {
+app.get('/api/posts/:id',  (req, res) => {
   dao.findOne({name: req.params.id + '.org'}, 'posts')
     .then(post => {
       if (post === undefined) return res.status(404).send('no such post')
