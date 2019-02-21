@@ -31,7 +31,7 @@ h1, h2, h3 {
   font-style: italic;
   font-size: 0.9em;
   font-family: serif;
-  margin-bottom: 3.5em;
+  /* margin-bottom: 3.5em; */
 }
 #meta > a > img {
   vertical-align: text-bottom;
@@ -160,10 +160,50 @@ dd {
   font-size: 0.9em;
   color: #aaa;
 }
+
+/* Table */
+
+table {
+  text-align: left;
+  border-collapse: collapse;
+}
+tr:nth-child(2n+1) {
+  background: #eee;
+}
+th, td {
+  min-width: 50px;
+  padding: 2px 10px;
+  border: 1px solid #ddd;
+}
+
 .table-container {
   margin: unset;
   overflow-x: auto;
 }
+
+@media only screen and (max-width: 768px) {
+  table {
+    margin: auto;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .table-container {
+    padding-left: var(--main-margin-medium);
+    margin-right: var(--main-margin-medium);
+  }
+}
+@media only screen and (min-width: 1000px) {
+  .table-container {
+    padding-left: var(--main-margin-normal);
+    max-width: unset;
+  }
+
+  table {
+    min-width: 648px;
+    margin: unset;
+  }
+}
+
 main > pre, main > blockquote {
   margin: unset;
   line-height: unset;
@@ -208,19 +248,6 @@ span.task-status {
 span.task-status.todo {
   background-color: rgb(39, 149, 182);
 }
-table {
-  text-align: left;
-  border-collapse: collapse;
-  margin: auto;
-}
-tr:nth-child(2n+1) {
-  background: #eee;
-}
-th, td {
-  min-width: 50px;
-  padding: 2px 10px;
-  border: 1px solid #ddd;
-}
 .tags {
   /* margin-top: 0; */
   margin-bottom: 5px;
@@ -229,15 +256,21 @@ th, td {
 }
 .tags > span {
   /* background:#ECCB6B; */
-  padding: 0px 4px 1px;
+  line-height: 1;
+  padding: 1px 4px 3px;
   margin: 2px 4px 2px 0;
-  border-radius: 4px;
+  border-radius: 3px;
   display: inline-block;
   cursor: not-allowed;
+  font-size: 13px;
   /* color */
   color:#fff;
   background: #eccb6b;
-  border: 1px solid #dcbb5b;
+  /* background: #ffeb8b; */
+  /* border: 1px solid #eccb6b; */
+  /* color: #39739d; */
+  /* background: #E1ECF4; */
+  /* border:1 solid #E1ECF4; */
 }
 pre .tags > span {
   margin-bottom: 5px;
@@ -247,6 +280,7 @@ blockquote {
   /* font-style: italic; */
   font-family: serif;
   font-size: 1.1em;
+  position: relative; /* for blockquote:before to be absolute */
 }
 blockquote > p{
   /* display: inline; */
@@ -259,12 +293,13 @@ blockquote:before {
   content: '“';
   font-size: 4em;
   line-height: 0.1em;
-  margin-right: 0.1em;
-  margin-left: 0;
+  /* margin-right: 0.1em; */
+  /* margin-left: 0; */
   /* vertical-align: -0.3em; */
   float: left;
-  position: relative;
-  top: 0.1em;
+  position: absolute;
+  top: 0.2em;
+  left: 0.6em;
 }
 #eof {
   font-size: 2em;
@@ -320,7 +355,7 @@ div#animation-container {
     margin-left: var(--main-margin-medium);
     margin-right: var(--main-margin-medium);
   }
-  main > h2, main > h3, main > h4 {
+  main > h2, main > h3, main > h4, main > h5, main > h6 {
     margin-left: unset;
   }
   main > pre, main > blockquote {
@@ -342,7 +377,15 @@ div#animation-container {
     margin-left: var(--main-margin-normal);
     /* padding: 0; */
   }
-  h1, h2, h3 {
+  div.head {
+    margin: 0;
+    max-width: unset;
+    /* border-bottom: 1px dashed grey; */
+    border-bottom: 1px dashed LightGray;
+    padding-left: 80px;
+    padding-bottom: 8px;
+  }
+  h2, h3, h4, h5 {
     max-width: unset;
   }
   img {
@@ -350,15 +393,6 @@ div#animation-container {
   }
   .section-number {
     width: var(--main-margin-normal);
-  }
-  .table-container {
-    margin-left: var(--main-margin-normal);
-    max-width: calc(100% - 120px);
-    /* overflow-x: visible; */
-  }
-  table {
-    min-width: 648px;
-    margin: unset;
   }
   main > pre, main > blackquote {
     border-left: none;
@@ -506,3 +540,7 @@ div#animation-container {
     transform: rotate(1800deg);
   }
 }
+
+/* Local Variables: */
+/* local-abbrev-table: abc */
+/* End: */

@@ -87,7 +87,10 @@ function decodeDate(str) {
 function genTagsHtml(tags){
   // TODO
   if (tags === undefined) return ''
-  tags = '<div class="tags">' + tags.split(' ').reduce((sum, tag) => `${sum}<span id='${tag}'>${tag}</span>`,'') + '</div>'
+  // const rainbow = ['#FF0100', '#FF7F00', '#00BC3F', '#0068FF']
+  const rainbow = ['rgba(255, 1, 0, 0.6)', 'rgba(255, 127, 0, 0.6)', 'rgba(0, 188, 63, 0.6)', 'rgba(0, 104, 255, 0.6)']
+  tags = '<div class="tags">' + tags.split(' ').reduce((sum, tag) => `${sum}<span id='${tag}'
+style='background:${rainbow[Math.floor(Math.random() * rainbow.length)]}'>#${tag}</span>`,'') + '</div>'
   return tags.replace(/recommend/g, '˗ˏˋrecommendˎˊ')
 }
 
