@@ -96,6 +96,7 @@ app.post('/api/reelin', (req, res) => {
   const commits = req.body.commits
   let message = ""
   for (let commit of commits) {
+    message += commit.id + ' :\n'
     if (commit.added.length !== 0) {
       commit.added.forEach(name => {
         if (name.startsWith('posts/') || name.startsWith('notes/')) {
@@ -123,11 +124,7 @@ app.post('/api/reelin', (req, res) => {
     }
   }
 
-  if (message) {
-    res.send(message)
-  } else {
-    res.send('nothing to be done')
-  }
+  res.send(message)
 })
 
 app.get('/robots.txt', (req, res) => {

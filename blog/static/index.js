@@ -92,7 +92,8 @@ function genTagsHtml(tags){
 }
 
 function genUrlTitle(title) {
-  return title.replace(/[?.!]$/, '').replace(/[: ?]+/g, '-')
+  // TODO
+  return title.replace(/\[.\] /, '').replace(/[?.!]$/, '').replace(/[: ?]+/g, '-')
 }
 
 function genCreated(name) {
@@ -239,7 +240,7 @@ function route(path) {
         cache['/api/posts'][1] = 'Posts | nichijou'
 
         let contents = posts.reduce((sum, post) => {
-          let path = `/posts/${post.name.substr(0, 4)}/${genUrlTitle(post.title)}`
+          let path = `/posts/${post.name.substr(0, 4)}$${genUrlTitle(post.title)}`
           return `${sum}<span>\n  (${genCreated(post.name)} '(<a href="${path}" style="font-size:1.5em">${post.title}</a>)
                 ${genTagsHtml(post.tags)})</span>`},'')
           // :tags ${genTagsHtml(post.tags)})</span>`},'')
@@ -337,10 +338,10 @@ function route(path) {
           document.title = post.title
           cache[url] = []
           cache[url][1] = post.title
-          let content = `<h1>${post.title}</h1>${genTagsHtml(post.tags)}
+          let content = `<div class='head'><h1>${post.title}</h1>${genTagsHtml(post.tags)}
 <div id="meta"><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
 <img alt="Creative Commons License" style="border-width:0;opacity:0.5" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAIAAAD8q9/YAAAABGdBTUEAANbY1E9YMgAAAZ9JREFUSMflljFrwkAUx98H6J3N6KbXFjtJJZNIB+Ntds0kdIxDp3boTYJ0UDcLutxXOCfbpejQSRE5+g38CvcVrtCTNJVLiFAKaR4ZwvH+yf3yf+/lAHIYOjfxDTybi+jVvesCwGg0ssoopRjjKZ+Y5O3HtnBayISvduApn2CM42hD5splxeQv3hf9fj/DwI3rRrlcTq4NKSUAdG47RrKRm/ZNO6vACCNjr5SSEAIAlFKlFKUUAAghUkpjcs2thVU9fh5b58Lhy37eWxejKmtynOSwV9MA9556ALBcLrXWhBDf97XW7Cscx1FKcc6FEGYRYRRW9Wq9sj794CZhN3GZvyWxAz883gOAlFIpFZ1bvu+7rhutasYYxtioXt9e1tt1gsNWT+J2HPdp0kuOALY6TCkNgsA4zBjjnO8dRkc4nOCVtYzTOHyUJL6H0b6HhRCO4wBAEARhD7uuu9vttNatVqt6VU3Zw+mB/7qHZ3NRb9RLpVKOpvSUTxA6GQ6HCcCe551fnP2T/3A4ugaDgZW26TWLxWK2T1r5OkvnKj4Bfm7H+J/sGfMAAAAASUVORK5CYII=" /></a>
-${genDateInfo(post)} by Angus Zhang</div>
+${genDateInfo(post)} by Angus Zhang</div></div>
 ${post.content}<div id='eof'>✣</div>`
 
           main.innerHTML = content
@@ -353,7 +354,7 @@ ${post.content}<div id='eof'>✣</div>`
       // revise path
       let title = cache[url][1]
       // let newPath = `/posts/${post.name.substr(0, 4)}/${genUrlTitle(post.title)}`
-      let newPath = `/posts/${path.substr(7, 4)}/${genUrlTitle(title)}`
+      let newPath = `/posts/${path.substr(7, 4)}$${genUrlTitle(title)}`
       if (window.location.pathname !== newPath) {
         window.history.replaceState(null, null, newPath)
       }
