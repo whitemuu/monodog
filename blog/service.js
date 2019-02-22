@@ -4,7 +4,7 @@ const fetch = require('node-fetch')
 const Prism = require('prismjs')
 var loadLanguages = require('prismjs/components/');
 // default languages: markup(markup, html, xml, svg, mathml), css, clike and javascript
-loadLanguages(['lisp', 'haskell', 'java', 'lua', 'perl', 'bash']);
+loadLanguages(['lisp', 'haskell', 'java', 'c', 'sql', 'lua', 'perl', 'bash']);
 
 const parser = new org.Parser();
 

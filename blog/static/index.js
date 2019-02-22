@@ -19,6 +19,7 @@ my %site_info = (<span style="font-size:1.2em;color:#555;">
 }
 // age ${new Date().getFullYear() - 1991}
 
+
 // karasu begin ---------------------------------------------
 const karasu = document.getElementById('top')
 // why cannot name it foothold in ios/safari
@@ -61,6 +62,17 @@ window.onscroll = () => {
       karasu.style.transform = ""
     }, 800)
   }
+
+  // TODO
+  // https://www.w3schools.com/howto/howto_js_sticky_header.asp
+  let toc = document.getElementById("toc")
+  if (toc !== null) {
+    if (window.pageYOffset > 170) {
+      toc.classList.add("sticky");
+    } else {
+      toc.classList.remove("sticky");
+    }
+  }
 }
 // karasu end-------------------------------------------------
 
@@ -88,9 +100,8 @@ function genTagsHtml(tags){
   // TODO
   if (tags === undefined) return ''
   // const rainbow = ['#FF0100', '#FF7F00', '#00BC3F', '#0068FF']
-  const rainbow = ['rgba(255, 1, 0, 0.6)', 'rgba(255, 127, 0, 0.6)', 'rgba(0, 188, 63, 0.6)', 'rgba(0, 104, 255, 0.6)']
-  tags = '<div class="tags">' + tags.split(' ').reduce((sum, tag) => `${sum}<span id='${tag}'
-style='background:${rainbow[Math.floor(Math.random() * rainbow.length)]}'>#${tag}</span>`,'') + '</div>'
+  // const rainbow = ['rgba(255, 1, 0, 0.6)', 'rgba(255, 127, 0, 0.6)', 'rgba(0, 188, 63, 0.6)', 'rgba(0, 104, 255, 0.6)']
+  tags = '<div class="tags">' + tags.split(' ').reduce((sum, tag) => `${sum}<span id='${tag}'>#${tag}</span>`,'') + '</div>'
   return tags.replace(/recommend/g, '˗ˏˋrecommendˎˊ')
 }
 
@@ -343,16 +354,36 @@ function route(path) {
           cache[url][1] = post.title
           let content = `<div class='head'><h1>${post.title}</h1>${genTagsHtml(post.tags)}
 <div id="meta"><a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">
-<img alt="Creative Commons License" style="border-width:0;opacity:0.5" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAIAAAD8q9/YAAAABGdBTUEAANbY1E9YMgAAAZ9JREFUSMflljFrwkAUx98H6J3N6KbXFjtJJZNIB+Ntds0kdIxDp3boTYJ0UDcLutxXOCfbpejQSRE5+g38CvcVrtCTNJVLiFAKaR4ZwvH+yf3yf+/lAHIYOjfxDTybi+jVvesCwGg0ssoopRjjKZ+Y5O3HtnBayISvduApn2CM42hD5splxeQv3hf9fj/DwI3rRrlcTq4NKSUAdG47RrKRm/ZNO6vACCNjr5SSEAIAlFKlFKUUAAghUkpjcs2thVU9fh5b58Lhy37eWxejKmtynOSwV9MA9556ALBcLrXWhBDf97XW7Cscx1FKcc6FEGYRYRRW9Wq9sj794CZhN3GZvyWxAz883gOAlFIpFZ1bvu+7rhutasYYxtioXt9e1tt1gsNWT+J2HPdp0kuOALY6TCkNgsA4zBjjnO8dRkc4nOCVtYzTOHyUJL6H0b6HhRCO4wBAEARhD7uuu9vttNatVqt6VU3Zw+mB/7qHZ3NRb9RLpVKOpvSUTxA6GQ6HCcCe551fnP2T/3A4ugaDgZW26TWLxWK2T1r5OkvnKj4Bfm7H+J/sGfMAAAAASUVORK5CYII=" /></a>
+<img alt="Creative Commons License" style="border-width:0;opacity:0.5" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAIAAAD8q9/YAAAABGdBTUEAANbY1E9YMgAAAZ9JREFUSMflljFrwkAUx98H6J3N6KbXFjtJJZNIB+Ntds0kdIxDp3boTYJ0UDcLutxXOCfbpejQSRE5+g38CvcVrtCTNJVLiFAKaR4ZwvH+yf3yf+/lAHIYOjfxDTybi+jVvesCwGg0ssoopRjjKZ+Y5O3HtnBayISvduApn2CM42hD5splxeQv3hf9fj/DwI3rRrlcTq4NKSUAdG47RrKRm/ZNO6vACCNjr5SSEAIAlFKlFKUUAAghUkpjcs2thVU9fh5b58Lhy37eWxejKmtynOSwV9MA9556ALBcLrXWhBDf97XW7Cscx1FKcc6FEGYRYRRW9Wq9sj794CZhN3GZvyWxAz883gOAlFIpFZ1bvu+7rhutasYYxtioXt9e1tt1gsNWT+J2HPdp0kuOALY6TCkNgsA4zBjjnO8dRkc4nOCVtYzTOHyUJL6H0b6HhRCO4wBAEARhD7uuu9vttNatVqt6VU3Zw+mB/7qHZ3NRb9RLpVKOpvSUTxA6GQ6HCcCe551fnP2T/3A4ugaDgZW26TWLxWK2T1r5OkvnKj4Bfm7H+J/sGfMAAAAASUVORK5CYII=" /></a>
 ${genDateInfo(post)} by Angus Zhang</div></div>
+${post.toc.match(/<li>/g) === null || post.toc.match(/<li>/g).length < 3 ? '' : '<div id="toc"><div id="showhide">[hide]</div>' + post.toc + '</div>'}
 ${post.content}<div id='eof'>✣</div>`
 
           main.innerHTML = content
           cache[url][0] = content
+
         } catch (e) {
           console.log(e)
         }
       }
+
+      // content fold start ---------------------------------------
+      try {
+        const showhide = document.getElementById('showhide')
+        showhide.onclick = () => {
+          if (showhide.innerText === '[hide]') {
+            showhide.innerText = '[show]'
+            showhide.nextSibling.style.display = "none"
+          } else {
+            showhide.innerText = '[hide]'
+            showhide.nextSibling.style.display = "block"
+          }
+        }
+      } catch (e){
+        console.log('no toc displayed')
+      }
+      // content fold end ---------------------------------------
+
 
       // revise path
       let title = cache[url][1]
