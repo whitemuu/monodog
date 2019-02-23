@@ -12,7 +12,7 @@ const cache = {
 my %site_info = (<span style="font-size:1.2em;color:#555;">
               front_end => [qw| HTML CSS Javascript    |],
                back_end => [qw| Nodejs Express MongoDB |],
-                 credit => [qw| Org-js Prismjs         |],
+                credits => [qw| Org-js Prismjs         |],
                    desc => '<a href='/posts/41LP'>link</a>',
              repository => '<a href='https://github.com/whitemuu/monodog' target='_blank'>whitemuu/monodog</a>'</span>
                 );</pre>`, 'About | nichijou']
@@ -379,6 +379,19 @@ ${post.content}<div id='eof'>✣</div>`
             showhide.nextSibling.style.display = "block"
           }
         }
+
+        // document.onkeydown = key => {
+        //   if (key.code === 'KeyT') {
+        //     if (showhide.innerText === '[hide]') {
+        //       showhide.innerText = '[show]'
+        //       showhide.nextSibling.style.display = "none"
+        //     } else {
+        //       showhide.innerText = '[hide]'
+        //       showhide.nextSibling.style.display = "block"
+        //     }
+        //   }
+        // }
+
       } catch (e){
         console.log('no toc displayed')
       }
