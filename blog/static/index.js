@@ -106,8 +106,7 @@ function genTagsHtml(tags){
 }
 
 function genUrlTitle(title) {
-  // TODO
-  return title.replace(/\[.\] /, '').replace(/[?.!]$/, '').replace(/[: ?]+/g, '-')
+  return title.replace(/["']/g, '').replace(/\[.\] /, '').replace(/[？?.!]$/, '').replace(/[: ?]+/g, '-')
 }
 
 function genCreated(name) {
@@ -255,11 +254,13 @@ function route(path) {
 
         let contents = posts.reduce((sum, post) => {
           let path = `/posts/${post.name.substr(0, 4)}$${genUrlTitle(post.title)}`
-          return `${sum}<span>\n  (${genCreated(post.name)} '(<a href="${path}" style="font-size:1.5em">${post.title}</a>)
-                ${genTagsHtml(post.tags)})</span>`},'')
+          return `${sum}<span>\n<span class='lisp-list'>  (${genCreated(post.name)} '(</span><a href="${path}" style="font-size:1.5em">${post.title}</a><span class='lisp-list'>)</span>
+<span class='lisp-list'>                </span>${genTagsHtml(post.tags)}<span class='lisp-list'><span class='lisp-list'>)</span></span></span>`},'')
           // :tags ${genTagsHtml(post.tags)})</span>`},'')
 
-        contents = `<pre class="infopre">(posts${contents || '\n  nil'})</pre><div id='eof'>✣</div>`
+        contents = `<pre class="infopre">
+<span class='lisp-list'>(posts</span>${contents || '\n  nil'}<span class='lisp-list'>)</span>
+</pre><div id='eof'>✣</div>`
 
         main.innerHTML = contents
         cache['/api/posts'][0] = contents

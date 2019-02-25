@@ -116,12 +116,30 @@ pre.infopre > span > a {
   background: #333;
   display: inline-block;
   color: white;
-  padding: 3px 4px;
+  /* padding: 3px 4px; */
+  padding: 30px 30px;
   margin-bottom: 1px;
 
   font-family: var(--default-font-family);
   /* box-shadow: -0.5px -1px 4px 0px rgba(0, 0, 0, 0.4); */
   /* box-shadow: 1px -1px 5px 0px rgba(0, 0, 0, 0.4); */
+}
+
+@media only screen and (max-width: 768px) {
+  pre.infopre > span > a {
+    box-sizing: border-box;
+    /* width: calc(100% - 60px); */
+    width: 100%;
+    text-align: center;
+    padding: 30px 5px;
+    white-space: pre-wrap;
+  }
+  span.lisp-list {
+    display: none;
+  }
+  div.tags{
+    width: calc(100% - 60px);
+  }
 }
 /* --------------- main: article --------------- */
 /* all */
@@ -392,7 +410,8 @@ pre .tags {
 }
 .tags > span {
   line-height: 1;
-  padding: 1px 4px 3px;
+  /* padding: 1px 4px 3px; */
+  padding: 4px;
   margin-right: 1px;
   /* border-radius: 3px; */
   display: inline-block;
