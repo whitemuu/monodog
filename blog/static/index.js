@@ -214,10 +214,11 @@ function route(path) {
     if (nav) {
       purgeActive()
       nav.id = 'active'
-      document.getElementById('top').style.display = 'none';
-      document.getElementById('foothold').style.display = 'none';
     }
   }
+  // karasu
+  document.getElementById('top').style.display = 'none';
+  document.getElementById('foothold').style.display = 'none';
 
   // just push/pop(forward/backword) within page no need to reset main content
   if (location.pathname === lastPath) return jump(location.hash.substr(1))
@@ -255,8 +256,8 @@ function route(path) {
 
         let contents = posts.reduce((sum, post) => {
           let path = `/posts/${post.name.substr(0, 4)}$${genUrlTitle(post.title)}`
-          return `${sum}<span>\n<span class='lisp-list'>  (${genCreated(post.name)} '(</span><a href="${path}" style="font-size:1.5em">${post.title}</a><span class='lisp-list'>)</span>
-<span class='lisp-list'>                </span>${genTagsHtml(post.tags)}<span class='lisp-list'><span class='lisp-list'>)</span></span></span>`},'')
+          return `${sum}<span class='entry'>\n<span class='lisp-list'>  (${genCreated(post.name)} </span>(<a href="${path}" style="font-size:1.5em">${post.title}</a>)<span class='lisp-list'></span>
+<span class='lisp-list'>              </span>${genTagsHtml(post.tags)}<span class='lisp-list'><span class='lisp-list'>)</span></span></span>`},'')
           // :tags ${genTagsHtml(post.tags)})</span>`},'')
 
         contents = `<pre class="infopre">
@@ -374,7 +375,7 @@ ${post.content}<div id='eof'>✣</div>`
         const showhide = document.getElementById('showhide')
         showhide.onclick = () => {
           if (showhide.innerText === '[hide]') {
-            showhide.innerText = '[show]'
+            showhide.innerText = '[TOC]'
             showhide.nextSibling.style.display = "none"
           } else {
             showhide.innerText = '[hide]'
