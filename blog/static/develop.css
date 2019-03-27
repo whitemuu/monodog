@@ -56,9 +56,6 @@ h1, h2, h3 {
   border: 1px dashed #999;
 
 }
-/* .entry { */
-/*   border-bottom: 1px dashed #999; */
-/* } */
 
 nav > ul {
   margin: 5px;
@@ -68,7 +65,7 @@ nav > ul {
 }
 nav > ul > li {
   display: inline-block;
-  font-size: 1.2em;
+  /* font-size: 1.1em; */
   font-family: 'my pixel';
   list-style: none;
   /* font-weight: bold; */
@@ -86,14 +83,12 @@ nav a {
   padding: 0 5px;
 }
 nav a:hover, nav a#active  {
-  background: rgba(255, 255, 255, 0.4);
-  /* border-radius: 3px; */
-  /* background: white; */
-  /* color: #333; */
+  /* background: rgba(255, 255, 255, 0.4); */
+  text-shadow: 2px 2px #FF0000;
 }
 nav a#active {
-  background: rgba(255, 255, 255, 0.2);
-  /* background: white; */
+  /* background: rgba(255, 255, 255, 0.2); */
+  text-shadow: 2px 2px #FF0000;
 }
 nav > ul > li > a:visited {
 }
@@ -122,8 +117,9 @@ pre.infopre > span > a:hover {
   /* background: var(--color-red); */
   /* text-decoration: unset; */
 }
-pre.infopre > span.entry > a {
+pre.infopre > span.entry > a.title {
   /* background: #333; */
+  font-size: 1.5em;
   display: inline-block;
   padding: 3px 4px;
   color: #444;
@@ -136,13 +132,14 @@ pre.infopre > span.entry > a {
 }
 
 @media only screen and (max-width: 768px) {
-  pre.infopre > span > a {
+  pre.infopre > span > a.title {
     box-sizing: border-box;
     /* width: calc(100% - 60px); */
     width: 100%;
     text-align: center;
     padding: 30px 5px;
     white-space: pre-wrap;
+    border-top : 1px dashed #ddd;
   }
   span.lisp-list {
     display: none;
@@ -150,6 +147,10 @@ pre.infopre > span.entry > a {
   div.tags{
     /* width: calc(100% - 60px); */
     width: 100%;
+    text-align: center;
+  }
+  div#tags-cloud {
+    width: unset;
   }
 }
 /* --------------- main: article --------------- */
@@ -590,6 +591,7 @@ div#animation-container {
     position: fixed;
     width: 250px;
     bottom: 0;
+    /* font-family: "my pixel"; */
   }
   img#top, img#foothold {
     transition: 0.70s;

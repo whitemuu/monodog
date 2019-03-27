@@ -256,7 +256,7 @@ function route(path) {
 
         let contents = posts.reduce((sum, post) => {
           let path = `/posts/${post.name.substr(0, 4)}$${genUrlTitle(post.title)}`
-          return `${sum}<span class='entry'>\n<span class='lisp-list'>  (${genCreated(post.name)} </span>(<a href="${path}" style="font-size:1.5em">${post.title}</a>)<span class='lisp-list'></span>
+          return `${sum}<span class='entry'>\n<span class='lisp-list'>  (${genCreated(post.name)} (</span><a href="${path}" class='title'>${post.title}</a><span class='lisp-list'>)</span>
 <span class='lisp-list'>              </span>${genTagsHtml(post.tags)}<span class='lisp-list'><span class='lisp-list'>)</span></span></span>`},'')
           // :tags ${genTagsHtml(post.tags)})</span>`},'')
 
@@ -321,7 +321,7 @@ function route(path) {
         tags = Object.keys(tags).reduce((sum, tag) => `${sum}<span id="${tag}" style="font-size:${15 + tags[tag] * 2}px">${tag}</span>`, '')
         // console.log(tags)
         tags = tags.replace(/recommend/g, '˗ˏˋrecommendˎˊ')
-        tags = `<div id="tags-container" class='tags' style="margin-top:80px">${tags}</div>`
+        tags = `<div id="tags-cloud" class='tags' style="margin-top:80px">${tags}</div>`
         main.innerHTML = tags
 
         cache['/api/tags'] = []
