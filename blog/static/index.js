@@ -321,7 +321,7 @@ function route(path) {
         tags = Object.keys(tags).reduce((sum, tag) => `${sum}<span id="${tag}" style="font-size:${15 + tags[tag] * 2}px">${tag}</span>`, '')
         // console.log(tags)
         tags = tags.replace(/recommend/g, '˗ˏˋrecommendˎˊ')
-        tags = `<div id="tags-cloud" class='tags' style="margin-top:80px">${tags}</div>`
+        tags = `<div id="tags-cloud" class='tags'>${tags}</div>`
         main.innerHTML = tags
 
         cache['/api/tags'] = []
